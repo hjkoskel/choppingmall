@@ -1,0 +1,2248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
+    />
+    <title>CHOPPING MALL</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #07060b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      canvas {
+        max-width: 100vw;
+        max-height: 100vh;
+        aspect-ratio: 960/760;
+        box-shadow: 0 0 60px #000;
+        border-radius: 6px;
+        touch-action: none;
+      }
+      html,
+      body {
+        touch-action: none;
+        overscroll-behavior: none;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      #ui {
+        display: none;
+      }
+      body.touch #ui {
+        display: block;
+      }
+      #joy {
+        position: fixed;
+        left: calc(18px + env(safe-area-inset-left, 0px));
+        bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        touch-action: none;
+      }
+      #knob {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 64px;
+        height: 64px;
+        margin: -32px 0 0 -32px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.28);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        pointer-events: none;
+      }
+      #pad {
+        position: fixed;
+        right: calc(18px + env(safe-area-inset-right, 0px));
+        bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        pointer-events: none;
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        pointer-events: none;
+      }
+      .btn {
+        pointer-events: auto;
+        touch-action: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: #fff;
+        font:
+          700 15px 'Trebuchet MS',
+          Verdana,
+          sans-serif;
+        background: rgba(20, 16, 32, 0.6);
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        box-sizing: border-box;
+      }
+      .btn small {
+        font-size: 12px;
+        opacity: 0.9;
+      }
+      .btn.sm {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+      }
+      .btn.wp {
+        width: 58px;
+        height: 58px;
+      }
+      .btn.wp.sel {
+        border-color: #ffd45c;
+        background: rgba(255, 212, 92, 0.25);
+        color: #ffd45c;
+      }
+      #fire {
+        width: 112px;
+        height: 112px;
+        font-size: 20px;
+        background: rgba(226, 59, 59, 0.45);
+        border-color: rgba(255, 120, 120, 0.8);
+      }
+      .btn.on {
+        background: rgba(255, 255, 255, 0.35);
+      }
+      #bm.off {
+        opacity: 0.4;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c" width="960" height="760"></canvas>
+    <div id="ui">
+      <div id="joy"><div id="knob"></div></div>
+      <div id="pad">
+        <div class="row">
+          <div class="btn sm" id="bm">♪</div>
+          <div class="btn sm" id="br">↻</div>
+        </div>
+        <div class="row">
+          <div class="btn wp" data-w="0"><b>1</b><small>0</small></div>
+          <div class="btn wp" data-w="1"><b>2</b><small>0</small></div>
+          <div class="btn wp" data-w="2"><b>3</b><small>0</small></div>
+        </div>
+        <div class="btn" id="fire">FIRE</div>
+      </div>
+    </div>
+    <script>
+      /*
+       * CHOPPING MALL: a single-file canvas game. No dependencies, no network.
+       *
+       * File layout (search for the banner comments):
+       *   CANVAS, GEOMETRY AND TUNING   world constants, shops, obstacles, CFG balance values
+       *   STATIC BACKGROUND             offscreen render of the mall
+       *   GAME STATE                    S, P, R and the projectile / particle lists
+       *   AUDIO                         music loop, stingers, engine and sound effects
+       *   GAMEPLAY                      movement, weapons, robot AI, per-frame update
+       *   RENDERING AND HUD             sprites, effects, HUD and screens
+       *   TOUCH CONTROLS AND MAIN LOOP  on-screen controls and requestAnimationFrame loop
+       *
+       * Short global names:
+       *   g    2D drawing context          cv  the canvas        W, H   canvas size
+       *   CX, CY  mall centre              AO, AI  outer wall / inner shop block apothems
+       *   N    the six hexagon edge normals (edge k faces angle 30 + 60k degrees)
+       *   OB   fixed obstacles             SH  shop doors (one per hexagon edge)
+       *   K    keys currently held         S   game state (mode, score, lives, ammo ...)
+       *   P    player                      R   the robot
+       *   bul  player bullets    rb  robot bolts    mols  molotovs in flight    fires  fire pools
+       *   AC   Web Audio context           mus  music state    T  running time in seconds
+       */
+      // ======================================================================
+      // CANVAS, GEOMETRY AND TUNING
+      // The mall is a hexagonal ring: AO / AI are the apothems (centre-to-edge distances)
+      // of the outer wall and the inner shop block; the hallway is the space between them.
+      // ======================================================================
+      const cv = document.getElementById('c'),
+        g = cv.getContext('2d'),
+        W = 960,
+        H = 760,
+        CX = 480,
+        CY = 395,
+        AO = 300,
+        AI = 150,
+        D30 = Math.cos(Math.PI / 6),
+        TAU = Math.PI * 2;
+      const FONT = '"Trebuchet MS",Verdana,sans-serif';
+      const N = [...Array(6)].map((_, k) => {
+        const a = ((30 + 60 * k) * Math.PI) / 180;
+        return { x: Math.cos(a), y: Math.sin(a), a };
+      });
+      /** Point at distance d along the normal of hexagon edge k, shifted t along that edge. */
+      const polar = (k, d, t = 0) => [CX + N[k].x * d - N[k].y * t, CY + N[k].y * d + N[k].x * t];
+      /** Largest distance from the centre along any edge normal. Compare with AO / AI to test inside or outside the hallway. */
+      const maxDot = (x, y) => {
+        let m = -1e9;
+        for (const n of N) m = Math.max(m, (x - CX) * n.x + (y - CY) * n.y);
+        return m;
+      };
+      const SH = [
+        { n: 'SHELLS', c: '#d9503f', k: 1 },
+        { n: 'GAS', c: '#3fae6a', k: 2 },
+        { n: 'FIRST AID', c: '#4a90d9', k: 3 },
+        { n: 'AMMO', c: '#e8a33d', k: 0 },
+        { n: 'SHELLS', c: '#d9503f', k: 1 },
+        { n: 'AMMO', c: '#e8a33d', k: 0 },
+      ];
+      const MAXA = [60, 24, 6],
+        WN = ['PISTOL', 'SHOTGUN', 'MOLOTOV'];
+      // Gameplay tuning values (arrays are indexed by level 1-3, or by weapon/shop item)
+      const CFG = {
+        playerSpeed: 165,
+        aimDelay: 0.3,
+        robotHp: [30, 45, 60],
+        robotSpeed: [118, 130, 142],
+        robotShotInterval: [2.6, 2.2, 1.8],
+        shopCooldown: 22,
+        shopRestock: [18, 6, 2],
+        medkit: 45,
+      };
+      // obstacles
+      const OB = [];
+      for (let k = 0; k < 6; k++) {
+        const ty = [
+          ['bench', 'plant', 'bench', 'kiosk', 'plant', 'bench'][k],
+          ['plant', 'bin'][k % 2],
+          ['kiosk', 'bench', 'plant'][k % 3],
+        ];
+        [
+          [-105, 262],
+          [75, 188],
+          [118, 258],
+        ].forEach(([t, d], i) => {
+          const [x, y] = polar(k, d, k % 2 ? -t : t);
+          const type = ty[i];
+          OB.push({
+            x,
+            y,
+            type,
+            r: { plant: 17, bench: 20, bin: 12, kiosk: 26 }[type],
+            rot: N[k].a + Math.PI / 2,
+          });
+        });
+      }
+      /** True if a circle of radius r at (x, y) fits in the hallway and overlaps no obstacle. */
+      function valid(x, y, r) {
+        const m = maxDot(x, y);
+        if (m > AO - r || m < AI + r) return false;
+        for (const o of OB) {
+          const dx = x - o.x,
+            dy = y - o.y,
+            rr = o.r + r;
+          if (dx * dx + dy * dy < rr * rr) return false;
+        }
+        return true;
+      }
+      // ======================================================================
+      // STATIC BACKGROUND
+      // Floor, carpet, shop fronts and obstacles are drawn once to an offscreen canvas.
+      // ======================================================================
+      const bg = document.createElement('canvas');
+      bg.width = W;
+      bg.height = H;
+      /** Adds a regular hexagon with apothem a to the current path. */
+      function addHex(c, a) {
+        const r = a / D30;
+        for (let i = 0; i < 6; i++) {
+          const t = (i * Math.PI) / 3;
+          c[i ? 'lineTo' : 'moveTo'](CX + r * Math.cos(t), CY + r * Math.sin(t));
+        }
+        c.closePath();
+      }
+      /** Starts a new path containing one hexagon. */
+      function hexP(c, a) {
+        c.beginPath();
+        addHex(c, a);
+      }
+      /** Rounded-rectangle path. */
+      function rr(c, x, y, w, h, r) {
+        c.beginPath();
+        c.moveTo(x + r, y);
+        c.arcTo(x + w, y, x + w, y + h, r);
+        c.arcTo(x + w, y + h, x, y + h, r);
+        c.arcTo(x, y + h, x, y, r);
+        c.arcTo(x, y, x + w, y, r);
+        c.closePath();
+      }
+      /** Draws one obstacle (plant, bench, bin or kiosk) onto context c. */
+      function drawOb(c, o) {
+        c.save();
+        c.translate(o.x, o.y);
+        c.fillStyle = 'rgba(0,0,0,.25)';
+        c.beginPath();
+        c.ellipse(3, 5, o.r + 3, o.r, 0, 0, TAU);
+        c.fill();
+        if (o.type == 'plant') {
+          c.fillStyle = '#8a4b2a';
+          c.beginPath();
+          c.arc(0, 0, 11, 0, TAU);
+          c.fill();
+          c.fillStyle = '#5a2f19';
+          c.beginPath();
+          c.arc(0, 0, 8, 0, TAU);
+          c.fill();
+          for (let i = 0; i < 8; i++) {
+            const a = (i * TAU) / 8;
+            c.fillStyle = i % 2 ? '#2f8a3c' : '#3fae4f';
+            c.beginPath();
+            c.ellipse(Math.cos(a) * 8, Math.sin(a) * 8, 10, 5, a, 0, TAU);
+            c.fill();
+          }
+          c.fillStyle = '#57c86a';
+          c.beginPath();
+          c.arc(0, 0, 6, 0, TAU);
+          c.fill();
+        } else if (o.type == 'bench') {
+          c.rotate(o.rot);
+          c.fillStyle = '#3b2a1c';
+          c.fillRect(-20, -9, 5, 18);
+          c.fillRect(15, -9, 5, 18);
+          c.fillStyle = '#8a5a34';
+          c.fillRect(-22, -8, 44, 6);
+          c.fillRect(-22, -1, 44, 6);
+          c.fillStyle = '#a8703f';
+          c.fillRect(-22, -8, 44, 2);
+          c.fillRect(-22, -1, 44, 2);
+          c.fillStyle = '#5a3a22';
+          c.fillRect(-22, 6, 44, 3);
+        } else if (o.type == 'bin') {
+          c.fillStyle = '#6f7780';
+          c.beginPath();
+          c.arc(0, 0, 12, 0, TAU);
+          c.fill();
+          c.fillStyle = '#2a2e33';
+          c.beginPath();
+          c.arc(0, 0, 8, 0, TAU);
+          c.fill();
+          c.strokeStyle = '#9aa3ad';
+          c.lineWidth = 2;
+          c.beginPath();
+          c.arc(0, 0, 12, 0, TAU);
+          c.stroke();
+        } else {
+          c.rotate(o.rot);
+          c.fillStyle = '#2a4f7c';
+          rr(c, -24, -22, 48, 44, 5);
+          c.fill();
+          for (let i = -24; i < 24; i += 12) {
+            c.fillStyle = (i / 12) % 2 ? '#f2d04a' : '#e24b4b';
+            c.fillRect(i, -22, 12, 14);
+          }
+          c.fillStyle = '#cfe6ff';
+          c.fillRect(-18, -4, 36, 12);
+          c.fillStyle = '#fff';
+          c.globalAlpha = 0.4;
+          c.fillRect(-18, -4, 14, 12);
+        }
+        c.restore();
+      }
+      /** Renders the static mall background into the offscreen canvas. */
+      function buildBG() {
+        const c = bg.getContext('2d');
+        c.fillStyle = '#120e18';
+        c.fillRect(0, 0, W, H);
+        hexP(c, AO + 30);
+        c.fillStyle = '#352a33';
+        c.fill();
+        hexP(c, AO + 9);
+        c.strokeStyle = '#c9a24b';
+        c.lineWidth = 5;
+        c.stroke();
+        c.save();
+        c.beginPath();
+        addHex(c, AO);
+        addHex(c, AI);
+        c.clip('evenodd');
+        c.fillStyle = '#ebeae4';
+        c.fillRect(0, 0, W, H);
+        for (let x = 0; x < W; x += 40)
+          for (let y = 0; y < H; y += 40)
+            if (((x + y) / 40) % 2 == 0) {
+              c.fillStyle = '#f6f5f1';
+              c.fillRect(x, y, 40, 40);
+            }
+        c.strokeStyle = '#cdcbc3';
+        c.lineWidth = 1;
+        c.beginPath();
+        for (let x = 0; x < W; x += 40) {
+          c.moveTo(x, 0);
+          c.lineTo(x, H);
+        }
+        for (let y = 0; y < H; y += 40) {
+          c.moveTo(0, y);
+          c.lineTo(W, y);
+        }
+        c.stroke();
+        hexP(c, 225);
+        c.lineJoin = 'miter';
+        c.miterLimit = 10;
+        c.strokeStyle = '#a3161f';
+        c.lineWidth = 76;
+        c.stroke();
+        c.setLineDash([14, 14]);
+        c.strokeStyle = '#b72530';
+        c.lineWidth = 44;
+        c.stroke();
+        c.setLineDash([]);
+        c.strokeStyle = '#d9b24a';
+        c.lineWidth = 3;
+        hexP(c, 225 + 38);
+        c.stroke();
+        hexP(c, 225 - 38);
+        c.stroke();
+        c.strokeStyle = '#e9cf85';
+        c.lineWidth = 1;
+        hexP(c, 225 + 32);
+        c.stroke();
+        hexP(c, 225 - 32);
+        c.stroke();
+        for (let i = 0; i < 12; i++) {
+          const a = (i * TAU) / 12 + 0.2,
+            r = 225 / Math.max(...N.map((n) => Math.cos(a) * n.x + Math.sin(a) * n.y));
+          const gr = c.createRadialGradient(
+            CX + Math.cos(a) * r,
+            CY + Math.sin(a) * r,
+            0,
+            CX + Math.cos(a) * r,
+            CY + Math.sin(a) * r,
+            70,
+          );
+          gr.addColorStop(0, 'rgba(255,255,230,.35)');
+          gr.addColorStop(1, 'rgba(255,255,230,0)');
+          c.fillStyle = gr;
+          c.fillRect(0, 0, W, H);
+        }
+        c.restore();
+        // inner shop block
+        hexP(c, AI);
+        const gr = c.createLinearGradient(0, CY - 170, 0, CY + 170);
+        gr.addColorStop(0, '#3a3556');
+        gr.addColorStop(1, '#221f35');
+        c.fillStyle = gr;
+        c.fill();
+        c.strokeStyle = '#c9a24b';
+        c.lineWidth = 4;
+        c.stroke();
+        hexP(c, AI - 40);
+        c.strokeStyle = 'rgba(255,255,255,.07)';
+        c.lineWidth = 2;
+        c.stroke();
+        for (let k = 0; k < 6; k++) {
+          const n = N[k],
+            [bx, by] = polar(k, AI);
+          c.save();
+          c.translate(bx, by);
+          c.rotate(n.a);
+          c.fillStyle = '#1b1a26';
+          c.fillRect(-4, -76, 6, 152);
+          for (let i = -72; i < 72; i += 18) {
+            c.fillStyle = (i / 18) % 2 ? '#f4f4f4' : SH[k].c;
+            c.fillRect(0, i, 12, 18);
+          }
+          c.fillStyle = 'rgba(150,220,255,.55)';
+          c.fillRect(0, -24, 7, 48);
+          c.fillStyle = 'rgba(255,255,255,.4)';
+          c.fillRect(0, -24, 2, 48);
+          c.restore();
+          const [sx, sy] = polar(k, AI - 36);
+          c.fillStyle = 'rgba(10,8,18,.75)';
+          rr(c, sx - 48, sy - 13, 96, 26, 6);
+          c.fill();
+          c.strokeStyle = SH[k].c;
+          c.lineWidth = 2;
+          c.stroke();
+          c.fillStyle = SH[k].c;
+          c.font = 'bold 14px ' + FONT;
+          c.textAlign = 'center';
+          c.textBaseline = 'middle';
+          c.fillText(SH[k].n, sx, sy + 1);
+        }
+        // fountain & title in the middle
+        c.fillStyle = '#6e7f94';
+        c.beginPath();
+        c.arc(CX, CY + 38, 34, 0, TAU);
+        c.fill();
+        c.fillStyle = '#7fc4ea';
+        c.beginPath();
+        c.arc(CX, CY + 38, 28, 0, TAU);
+        c.fill();
+        c.fillStyle = '#bfe7fa';
+        c.beginPath();
+        c.arc(CX, CY + 38, 9, 0, TAU);
+        c.fill();
+        c.font = 'bold 26px ' + FONT;
+        c.fillStyle = '#ff5ca8';
+        c.shadowColor = '#ff2a8a';
+        c.shadowBlur = 14;
+        c.fillText('CHOPPING', CX, CY - 48);
+        c.fillStyle = '#5cd6ff';
+        c.shadowColor = '#1ab0ff';
+        c.fillText('MALL', CX, CY - 20);
+        c.shadowBlur = 0;
+        OB.forEach((o) => drawOb(c, o));
+        const v = c.createRadialGradient(CX, CY, 250, CX, CY, 560);
+        v.addColorStop(0, 'rgba(0,0,0,0)');
+        v.addColorStop(1, 'rgba(0,0,0,.55)');
+        c.fillStyle = v;
+        c.fillRect(0, 0, W, H);
+      }
+      buildBG();
+      // ======================================================================
+      // GAME STATE
+      // ======================================================================
+      const K = {};
+      let AC = null,
+        T = 0;
+      let best = null;
+      try {
+        best = JSON.parse(localStorage.getItem('shoppingMallBest'));
+      } catch (e) {}
+      const S = {
+        mode: 'title',
+        mt: 0,
+        score: 0,
+        lives: 3,
+        level: 1,
+        time: 0,
+        lt: 0,
+        kills: 0,
+        w: 0,
+        ammo: [0, 0, 0],
+        cool: [0, 0, 0, 0, 0, 0],
+        toast: '',
+        tt: 0,
+        shake: 0,
+      };
+      const P = { x: 0, y: 0, hp: 100, face: 0, aim: 0, cd: 0, inv: 0, flash: 0 };
+      const R = {
+        x: 0,
+        y: 0,
+        hp: 30,
+        max: 30,
+        sp: 120,
+        face: 0,
+        slow: 0,
+        cd: 0,
+        pause: 0,
+        dir: 1,
+        dead: false,
+        sh: 2,
+        wind: 0,
+        ck: 0,
+        rev: 0,
+        side: 1,
+        stk: 0,
+      };
+      let bul = [],
+        fires = [],
+        parts = [],
+        mols = [],
+        rb = [];
+      // ======================================================================
+      // AUDIO
+      // Everything is synthesised with the Web Audio API: music loop, stingers and effects.
+      // ======================================================================
+      let mute = false,
+        engV = 0,
+        engF = 50;
+      const mus = { on: false, gain: null, paused: false, resumeAt: 0, jg: null },
+        eng = {};
+      // --- Music: "Dm / Bb loop", a 12-bar sequenced chiptune loop at 224 BPM ---
+      const ML = { bpm: 224, bars: 12, slots: 8 };
+      ML.e = 60 / ML.bpm / 2;
+      ML.pass = ML.bars * ML.slots * ML.e;
+      const mlr = (t, n = 8) => Array(n).fill(t).join(' ');
+      const mlLead1 = [
+        '- - - - - A3+D4 A3+D4 A3+D4',
+        '- G#3 - - - - - -',
+        '- - - - - - - A3+D4',
+        '- - A3 - - A3 A3 -',
+        '- - - - - A3+D4 A3+D4 A3+D4',
+        'G#3 D4 F4 D4 G4 A3+D4 A3+D4 A3+D4',
+        'G#3 D4 G4 - F4 D4 - A3',
+        '- D4 - - - A3+D4 A3+D4 A3+D4',
+        'A3+D4 - - Bb3+D4 A3+D4 Bb3+F4 A3+D4 G#3+D4',
+        'Bb3 D4 Bb3 A3+D4 Bb3+F4 A3+D4 G#3+D4 Bb3',
+        'Bb3+D4 D4 Bb3+F4 D4 - - - -',
+        '- - - - A3 A3 C#4 D4',
+      ];
+      const mlLead2 = [
+        '- - - - - A4 A3 D4',
+        'G#3 D4 F4 D4 G4 A3+D4 A3+D4 A3+D4',
+        'G#3 D4 G4 D4 F4 D4 - -',
+        ...Array(9).fill(mlr('-')),
+      ];
+      const mlBass = [
+        mlr('D2'),
+        mlr('D2'),
+        mlr('D2'),
+        mlr('D2'),
+        mlr('D2'),
+        'D2 D2 D2 - - - D3 D2',
+        'D2 D2 D2 D3 D2 D2 D2 D2',
+        mlr('D2'),
+        'D2 D2 ' + mlr('Bb2', 6),
+        mlr('Bb2'),
+        mlr('Bb2', 6) + ' - -',
+        'Bb2 Bb2 Bb2 - A2 A2 C#3 D3',
+      ];
+      const mlDrums = Array.from({ length: 12 }, (_, bar) => {
+        const g = Array.from({ length: 8 }, (_, i) => (bar === 0 && i === 0 ? '-' : 'h'));
+        if (bar === 11) {
+          for (let i = 0; i < 8; i++) g[i] = i < 4 ? 'h' : 's';
+          g[0] = g[2] = 'hk';
+        } else {
+          g[0] += 'k';
+          g[4] += 'k';
+          g[2] += 's';
+          g[6] += 's';
+          if (bar === 5 || bar === 6) g[3] += 'k';
+          if (bar === 9) g[0] += 'c';
+        }
+        return g.join(' ');
+      });
+      const mlNote = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+      const mlFreq = (n) => {
+        const [, l, a, o] = n.match(/^([A-G])([#b]?)(\d)$/);
+        return (
+          440 * 2 ** ((mlNote[l] + (a == '#' ? 1 : a == 'b' ? -1 : 0) + 12 * (+o + 1) - 69) / 12)
+        );
+      };
+      /** Plays one synth note of the music loop. */
+      function mlTone(t, dur, hz, type, vol, cut) {
+        const o = AC.createOscillator(),
+          amp = AC.createGain(),
+          lp = AC.createBiquadFilter();
+        o.type = type;
+        o.frequency.value = hz;
+        lp.frequency.value = cut;
+        o.connect(lp);
+        amp.gain.setValueAtTime(0, t);
+        amp.gain.linearRampToValueAtTime(vol, t + 0.005);
+        amp.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        lp.connect(amp);
+        amp.connect(mus.gain);
+        o.start(t);
+        o.stop(t + dur + 0.02);
+      }
+      /** Plays a burst of filtered noise (hi-hat, snare, crash). */
+      function mlNoise(t, dur, hp, vol) {
+        const len = Math.floor(AC.sampleRate * dur),
+          buf = AC.createBuffer(1, len, AC.sampleRate),
+          d = buf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+        const src = AC.createBufferSource(),
+          f = AC.createBiquadFilter(),
+          amp = AC.createGain();
+        src.buffer = buf;
+        f.type = 'highpass';
+        f.frequency.value = hp;
+        amp.gain.setValueAtTime(vol, t);
+        amp.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        src.connect(f);
+        f.connect(amp);
+        amp.connect(mus.gain);
+        src.start(t);
+      }
+      /** Plays a kick drum. */
+      function mlKick(t) {
+        const o = AC.createOscillator(),
+          amp = AC.createGain();
+        o.frequency.setValueAtTime(150, t);
+        o.frequency.exponentialRampToValueAtTime(40, t + 0.12);
+        amp.gain.setValueAtTime(0.9, t);
+        amp.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+        o.connect(amp);
+        amp.connect(mus.gain);
+        o.start(t);
+        o.stop(t + 0.25);
+      }
+      /** Plays a drum slot; the token letters are h = hat, s = snare, k = kick, c = crash. */
+      function mlDrum(t, tok) {
+        if (tok.includes('h')) mlNoise(t, 0.05, 7000, 0.18);
+        if (tok.includes('s')) mlNoise(t, 0.14, 1500, 0.4);
+        if (tok.includes('k')) mlKick(t);
+        if (tok.includes('c')) mlNoise(t, 0.9, 5000, 0.25);
+      }
+      const mlTracks = [
+        { bars: mlLead1, play: (t, n) => mlTone(t, ML.e * 0.9, mlFreq(n), 'square', 0.07, 3000) },
+        { bars: mlLead2, play: (t, n) => mlTone(t, ML.e * 0.9, mlFreq(n), 'triangle', 0.07, 3000) },
+        { bars: mlBass, play: (t, n) => mlTone(t, ML.e * 0.95, mlFreq(n), 'sawtooth', 0.3, 500) },
+        { bars: mlDrums, play: mlDrum, dr: 1 },
+      ];
+      let mlNext = 0,
+        mlStep = 0;
+      /** Schedules every track of one eighth-note slot (0-95) at audio time t. */
+      function mlSlot(step, t) {
+        const b = step >> 3,
+          i = step & 7;
+        for (const { bars, play, dr } of mlTracks) {
+          const tok = bars[b].split(' ')[i];
+          if (tok === '-') continue;
+          if (dr) play(t, tok);
+          else tok.split('+').forEach((n) => play(t, n));
+        }
+      }
+      /** Schedules upcoming slots about a second ahead of the audio clock; also ends a pause. */
+      function mlPump() {
+        if (!AC || AC.state != 'running') return;
+        if (mus.paused) {
+          if (AC.currentTime >= mus.resumeAt) mlResume();
+          else return;
+        }
+        if (mlNext < AC.currentTime) mlNext = AC.currentTime + 0.05;
+        while (mlNext < AC.currentTime + 1) {
+          mlSlot(mlStep, mlNext);
+          mlNext += ML.e;
+          mlStep = (mlStep + 1) % 96;
+        }
+      }
+      /** Silences the loop for dur seconds and rewinds to the notes that were scheduled but not yet heard. */
+      function mlPause(dur) {
+        if (!AC || !mus.on) return;
+        const now = AC.currentTime;
+        if (!mus.paused) {
+          const back = Math.max(0, Math.ceil((mlNext - now) / ML.e) - 1);
+          mlStep = (((mlStep - back) % 96) + 96) % 96;
+          mus.gain.gain.cancelScheduledValues(now);
+          mus.gain.gain.setValueAtTime(0, now);
+          mus.paused = true;
+        }
+        mus.resumeAt = now + dur;
+      }
+      /** Brings the music back where it left off. */
+      function mlResume() {
+        mus.paused = false;
+        const now = AC.currentTime;
+        mus.gain.gain.cancelScheduledValues(now);
+        mus.gain.gain.setValueAtTime(mute ? 0 : 0.45, now);
+        mlNext = now + 0.1;
+      }
+      /** Creates the music bus and starts the scheduler (needs the audio context). */
+      function startMusic() {
+        if (!AC || mus.on) return;
+        mus.on = true;
+        const m = AC.createGain();
+        m.gain.value = mute ? 0 : 0.45;
+        m.connect(AC.destination);
+        mus.gain = m;
+        mlNext = AC.currentTime + 0.1;
+        mlStep = 0;
+        mlPump();
+        setInterval(mlPump, 150);
+      }
+      // ======================================================================
+      // STINGERS
+      // Short victory and defeat pieces. The music pauses while they play, then resumes.
+      // ======================================================================
+      function jingleWin(ctx, master) {
+        const beat = 60 / 157,
+          t0 = ctx.currentTime + 0.05,
+          at = (b) => t0 + b * beat;
+        const SEMI = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+        const hz = (name) => {
+          const m = name.match(/^([A-G])([#b]?)(\d)$/);
+          return (
+            440 *
+            Math.pow(
+              2,
+              (12 * (+m[3] + 1) + SEMI[m[1]] + (m[2] == '#' ? 1 : m[2] == 'b' ? -1 : 0) - 69) / 12,
+            )
+          );
+        };
+        function brass(name, b, dur, vol = 0.5) {
+          const s = at(b),
+            e = s + dur * beat,
+            g = ctx.createGain(),
+            lp = ctx.createBiquadFilter();
+          lp.type = 'lowpass';
+          lp.Q.value = 2;
+          lp.frequency.setValueAtTime(300, s);
+          lp.frequency.linearRampToValueAtTime(1800, s + 0.08);
+          lp.frequency.linearRampToValueAtTime(1000, e);
+          g.gain.setValueAtTime(0, s);
+          g.gain.linearRampToValueAtTime(vol, s + 0.04);
+          g.gain.setValueAtTime(vol, e - 0.05);
+          g.gain.linearRampToValueAtTime(0, e + 0.12);
+          lp.connect(g);
+          g.connect(master);
+          [-6, 6].forEach((c) => {
+            const o = ctx.createOscillator();
+            o.type = 'sawtooth';
+            o.frequency.value = hz(name);
+            o.detune.value = c;
+            o.connect(lp);
+            o.start(s);
+            o.stop(e + 0.15);
+          });
+        }
+        function strings(name, b, dur, vol = 0.22) {
+          const s = at(b),
+            e = s + dur * beat,
+            g = ctx.createGain(),
+            lp = ctx.createBiquadFilter();
+          lp.type = 'lowpass';
+          lp.frequency.value = 2200;
+          g.gain.setValueAtTime(0, s);
+          g.gain.linearRampToValueAtTime(vol, s + 0.08);
+          g.gain.setValueAtTime(vol, e - 0.05);
+          g.gain.linearRampToValueAtTime(0, e + 0.2);
+          lp.connect(g);
+          g.connect(master);
+          [-7, 7].forEach((c) => {
+            const o = ctx.createOscillator();
+            o.type = 'sawtooth';
+            o.frequency.value = hz(name);
+            o.detune.value = c;
+            o.connect(lp);
+            o.start(s);
+            o.stop(e + 0.25);
+          });
+        }
+        function piano(name, b, dur, vol = 0.22) {
+          const s = at(b),
+            e = s + dur * beat,
+            f = hz(name),
+            g = ctx.createGain();
+          g.gain.setValueAtTime(0, s);
+          g.gain.linearRampToValueAtTime(vol, s + 0.005);
+          g.gain.exponentialRampToValueAtTime(vol * 0.25, s + 0.4);
+          g.gain.exponentialRampToValueAtTime(0.0005, e + 0.4);
+          g.connect(master);
+          [
+            ['triangle', 1],
+            ['sine', 2],
+          ].forEach(([type, mult]) => {
+            const o = ctx.createOscillator(),
+              og = ctx.createGain();
+            o.type = type;
+            o.frequency.value = f * mult;
+            og.gain.value = mult === 1 ? 1 : 0.3;
+            o.connect(og);
+            og.connect(g);
+            o.start(s);
+            o.stop(e + 0.45);
+          });
+        }
+        function bass(name, b, dur, vol = 0.6) {
+          const s = at(b),
+            e = s + dur * beat,
+            o = ctx.createOscillator(),
+            lp = ctx.createBiquadFilter(),
+            g = ctx.createGain();
+          o.type = 'sawtooth';
+          o.frequency.value = hz(name);
+          lp.type = 'lowpass';
+          lp.frequency.setValueAtTime(900, s);
+          lp.frequency.exponentialRampToValueAtTime(300, e);
+          g.gain.setValueAtTime(0, s);
+          g.gain.linearRampToValueAtTime(vol, s + 0.01);
+          g.gain.setValueAtTime(vol, e - 0.06);
+          g.gain.linearRampToValueAtTime(0, e + 0.08);
+          o.connect(lp);
+          lp.connect(g);
+          g.connect(master);
+          o.start(s);
+          o.stop(e + 0.1);
+        }
+        const chord = (fn, names, b, dur, vol) => names.forEach((n) => fn(n, b, dur, vol));
+        piano('G4', 1, 1);
+        piano('A4', 2, 1);
+        chord(piano, ['Bb4', 'D5', 'F5'], 3, 1, 0.16);
+        chord(brass, ['Eb3', 'Bb3', 'Eb4', 'G4', 'Bb4', 'Eb5', 'G5'], 4, 4, 0.22);
+        piano('Bb3', 4, 2);
+        strings('Bb4', 4, 4);
+        bass('Eb2', 4, 4);
+        chord(piano, ['D4', 'F4', 'A4', 'D5', 'F5'], 10, 2, 0.14);
+        chord(piano, ['D2', 'A2', 'D3', 'F3', 'A3'], 10, 2, 0.14);
+        chord(brass, ['D4', 'F4', 'A4'], 10, 2, 0.3);
+        strings('A4', 8, 1);
+        strings('G4', 9, 3);
+        chord(piano, ['G3', 'B3', 'D4'], 13, 3, 0.2);
+        chord(piano, ['G2', 'D3', 'G3'], 13, 3, 0.2);
+        brass('D3', 13, 3);
+        bass('G2', 13, 3);
+        chord(piano, ['C#4', 'E4', 'A4', 'C#5', 'E5'], 16, 4, 0.14);
+        chord(piano, ['A1', 'A2', 'E3', 'A3'], 16, 4, 0.16);
+        return 20 * beat + 0.8;
+      }
+      /** Robot-wins stinger (from robotwin.html). Returns its length in seconds. */
+      function jingleLose(ctx, master) {
+        const beat = 60 / 143,
+          t0 = ctx.currentTime + 0.05,
+          at = (b) => t0 + b * beat,
+          hz = (m) => 440 * Math.pow(2, (m - 69) / 12);
+        const D2 = 38,
+          A2 = 45,
+          D3 = 50,
+          Fs3 = 54,
+          A3 = 57,
+          D4 = 62,
+          D5 = 74,
+          Fs5 = 78,
+          A5 = 81;
+        function brass(m, sb, db) {
+          const s = at(sb),
+            e = s + db * beat,
+            g = ctx.createGain(),
+            lp = ctx.createBiquadFilter();
+          lp.type = 'lowpass';
+          lp.Q.value = 2;
+          lp.frequency.setValueAtTime(300, s);
+          lp.frequency.linearRampToValueAtTime(1800, s + 0.08);
+          lp.frequency.linearRampToValueAtTime(1100, e);
+          g.gain.setValueAtTime(0, s);
+          g.gain.linearRampToValueAtTime(0.5, s + 0.04);
+          g.gain.setValueAtTime(0.5, e - 0.05);
+          g.gain.linearRampToValueAtTime(0, e + 0.12);
+          lp.connect(g);
+          g.connect(master);
+          [-6, 6].forEach((c) => {
+            const o = ctx.createOscillator();
+            o.type = 'sawtooth';
+            o.frequency.value = hz(m);
+            o.detune.value = c;
+            o.connect(lp);
+            o.start(s);
+            o.stop(e + 0.15);
+          });
+        }
+        function strings(m, sb, db) {
+          const s = at(sb),
+            e = s + db * beat,
+            g = ctx.createGain(),
+            lp = ctx.createBiquadFilter();
+          lp.type = 'lowpass';
+          lp.frequency.value = 2500;
+          g.gain.setValueAtTime(0, s);
+          g.gain.linearRampToValueAtTime(0.28, s + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.001, e + 0.1);
+          lp.connect(g);
+          g.connect(master);
+          [-5, 5].forEach((c) => {
+            const o = ctx.createOscillator();
+            o.type = 'sawtooth';
+            o.frequency.value = hz(m);
+            o.detune.value = c;
+            o.connect(lp);
+            o.start(s);
+            o.stop(e + 0.15);
+          });
+        }
+        function timpani(m, sb) {
+          const s = at(sb),
+            f = hz(m),
+            o = ctx.createOscillator(),
+            g = ctx.createGain();
+          o.frequency.setValueAtTime(f * 1.5, s);
+          o.frequency.exponentialRampToValueAtTime(f, s + 0.06);
+          g.gain.setValueAtTime(0.9, s);
+          g.gain.exponentialRampToValueAtTime(0.001, s + 0.6);
+          o.connect(g);
+          g.connect(master);
+          o.start(s);
+          o.stop(s + 0.65);
+          const len = Math.floor(ctx.sampleRate * 0.04),
+            buf = ctx.createBuffer(1, len, ctx.sampleRate),
+            d = buf.getChannelData(0);
+          for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+          const n = ctx.createBufferSource(),
+            ng = ctx.createGain(),
+            bp = ctx.createBiquadFilter();
+          bp.type = 'bandpass';
+          bp.frequency.value = 400;
+          ng.gain.value = 0.35;
+          n.buffer = buf;
+          n.connect(bp);
+          bp.connect(ng);
+          ng.connect(master);
+          n.start(s);
+        }
+        brass(A3, 0, 3.5);
+        brass(A2, 0, 3.5);
+        brass(D4, 4, 12);
+        brass(D3, 4, 12);
+        brass(D2, 4, 12);
+        const tp = 12,
+          sx = 1 / 6;
+        timpani(D3, tp + sx);
+        timpani(D3, tp + 2 * sx);
+        for (let k = 0; k < 3; k++) timpani(D3, tp + 0.5 + k * sx);
+        for (let k = 0; k < 3; k++) timpani(D3, tp + 1 + k * sx);
+        timpani(D3, tp + 1.5);
+        [A3, A2].forEach((m) => {
+          strings(m, 2, 0.4);
+          strings(m, 3.5, 0.5);
+        });
+        [D2, A2].forEach((m) => strings(m, 6, 2));
+        strings(Fs5, 8, 2);
+        [D5, Fs5, A5, D3, Fs3].forEach((m) => strings(m, 10, 4));
+        [D3, Fs3, A3, D4].forEach((m) => strings(m, 14, 2));
+        return 16 * beat + 0.8;
+      }
+      function jingleStop() {
+        if (mus.jg && AC) {
+          try {
+            mus.jg.gain.cancelScheduledValues(AC.currentTime);
+            mus.jg.gain.setValueAtTime(0, AC.currentTime);
+          } catch (e) {}
+        }
+        mus.jg = null;
+      }
+      /** Pauses the music and plays the "win" or "lose" stinger. */
+      function playJingle(kind) {
+        if (!AC || mute) return;
+        jingleStop();
+        const jg = AC.createGain(),
+          comp = AC.createDynamicsCompressor(),
+          master = AC.createGain();
+        master.gain.value = kind == 'win' ? 0.4 : 0.45;
+        master.connect(comp);
+        comp.connect(jg);
+        jg.connect(AC.destination);
+        mus.jg = jg;
+        const dur = kind == 'win' ? jingleWin(AC, master) : jingleLose(AC, master);
+        mlPause(dur);
+      }
+      /** Applies the engine hum volume and pitch chosen this frame (engV / engF). */
+      function engineApply() {
+        if (!AC) return;
+        if (!eng.g) {
+          const o = AC.createOscillator(),
+            o2 = AC.createOscillator(),
+            fl = AC.createBiquadFilter(),
+            g = AC.createGain(),
+            l = AC.createOscillator(),
+            lg = AC.createGain();
+          o.type = 'sawtooth';
+          o2.type = 'sawtooth';
+          fl.type = 'lowpass';
+          fl.frequency.value = 340;
+          g.gain.value = 0;
+          l.frequency.value = 8;
+          o.connect(fl);
+          o2.connect(fl);
+          fl.connect(g);
+          g.connect(AC.destination);
+          l.connect(lg);
+          lg.connect(g.gain);
+          o.start();
+          o2.start();
+          l.start();
+          Object.assign(eng, { o, o2, g, lg, l });
+        }
+        const t = AC.currentTime,
+          v = mute ? 0 : engV;
+        eng.g.gain.setTargetAtTime(v, t, 0.08);
+        eng.lg.gain.setTargetAtTime(v * 0.5, t, 0.08);
+        eng.o.frequency.setTargetAtTime(engF, t, 0.1);
+        eng.o2.frequency.setTargetAtTime(engF * 1.5 + 1.5, t, 0.1);
+        eng.l.frequency.setTargetAtTime(5 + engF * 0.1, t, 0.1);
+      }
+      /** Three metallic claw clanks, louder when v is higher. */
+      function clank(v) {
+        if (!AC || mute) return;
+        [0, 0.09, 0.17].forEach((d, i) => {
+          const t = AC.currentTime + d,
+            f = [1250, 1720, 1480][i],
+            o = AC.createOscillator(),
+            o2 = AC.createOscillator(),
+            gn = AC.createGain(),
+            fl = AC.createBiquadFilter();
+          o.type = o2.type = 'square';
+          o.frequency.value = f;
+          o2.frequency.value = f * 1.51;
+          fl.type = 'bandpass';
+          fl.frequency.value = 2200;
+          fl.Q.value = 3;
+          gn.gain.setValueAtTime(0.1 * v, t);
+          gn.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+          o.connect(fl);
+          o2.connect(fl);
+          fl.connect(gn);
+          gn.connect(AC.destination);
+          o.start(t);
+          o2.start(t);
+          o.stop(t + 0.1);
+          o2.stop(t + 0.1);
+        });
+      }
+      /** Plays a short synthesised sound effect. */
+      function sfx(f, d, ty = 'square', v = 0.05, f2 = f) {
+        if (!AC || mute) return;
+        const t = AC.currentTime,
+          o = AC.createOscillator(),
+          gn = AC.createGain();
+        o.type = ty;
+        o.frequency.setValueAtTime(f, t);
+        o.frequency.exponentialRampToValueAtTime(Math.max(20, f2), t + d);
+        gn.gain.setValueAtTime(v, t);
+        gn.gain.exponentialRampToValueAtTime(0.0001, t + d);
+        o.connect(gn).connect(AC.destination);
+        o.start();
+        o.stop(t + d);
+      }
+      // ======================================================================
+      // PARTICLES, SAVED BEST SCORE AND LEVEL FLOW
+      // ======================================================================
+      function addP(x, y, vx, vy, life, col, size, add) {
+        parts.push({ x, y, vx, vy, life, max: life, col, size, add });
+      }
+      /** Spawns a burst of n particles at (x, y). */
+      function burst(x, y, n, col, sp = 120, add) {
+        for (let i = 0; i < n; i++) {
+          const a = Math.random() * TAU,
+            s = Math.random() * sp;
+          addP(
+            x,
+            y,
+            Math.cos(a) * s,
+            Math.sin(a) * s,
+            0.3 + Math.random() * 0.5,
+            col,
+            2 + Math.random() * 3,
+            add,
+          );
+        }
+      }
+      function toast(s) {
+        S.toast = s;
+        S.tt = 1.8;
+      }
+      /** Stores the best run (score, time, robots destroyed) in localStorage. */
+      function saveBest() {
+        const sc = Math.floor(S.score);
+        if (!best || sc > best.score) {
+          best = { score: sc, time: Math.floor(S.time), kills: S.kills };
+          try {
+            localStorage.setItem('shoppingMallBest', JSON.stringify(best));
+          } catch (e) {}
+        }
+      }
+      /** Places the player and robot at their start positions. */
+      function spawn() {
+        [P.x, P.y] = polar(5, 225);
+        [R.x, R.y] = polar(2, 225);
+        P.face = Math.PI * 0.9;
+        R.face = 0;
+        P.inv = 2.5;
+        P.aim = 0;
+        R.pause = 1.6;
+        R.rev = 0;
+        R.stk = 0;
+      }
+      /** Resets health, robot, shops and projectiles for the current level. */
+      function startLevel() {
+        const l = S.level;
+        P.hp = 100;
+        R.max = R.hp = CFG.robotHp[l - 1];
+        R.sp = CFG.robotSpeed[l - 1];
+        R.dead = false;
+        R.slow = 0;
+        R.cd = 0;
+        bul = [];
+        fires = [];
+        parts = [];
+        mols = [];
+        rb = [];
+        R.sh = 1.8;
+        R.wind = 0;
+        S.cool.fill(0);
+        S.lt = 0;
+        spawn();
+        S.mode = 'intro';
+        S.mt = 2.4;
+      }
+      /** Starts a fresh three-life game at level 1 with no ammo. */
+      function newGame() {
+        startMusic();
+        jingleStop();
+        if (mus.paused) mlResume();
+        Object.assign(S, {
+          score: 0,
+          lives: 3,
+          level: 1,
+          time: 0,
+          kills: 0,
+          w: 0,
+          ammo: [0, 0, 0],
+        });
+        startLevel();
+      }
+      // ======================================================================
+      // KEYBOARD INPUT
+      // ======================================================================
+      addEventListener('keydown', (e) => {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code))
+          e.preventDefault();
+        if (!AC)
+          try {
+            AC = new (window.AudioContext || window.webkitAudioContext)();
+          } catch (_) {}
+        if (AC && AC.state == 'suspended') AC.resume();
+        if (e.repeat) return;
+        K[e.code] = 1;
+        if (e.code == 'KeyM') {
+          mute = !mute;
+          if (mus.gain) mus.gain.gain.value = mute ? 0 : 0.45;
+        }
+        if (e.code == 'KeyR') newGame();
+        else if ((e.code == 'Enter' || e.code == 'Space') && S.mode == 'title') newGame();
+        const d = { Digit1: 0, Digit2: 1, Digit3: 2, Numpad1: 0, Numpad2: 1, Numpad3: 2 }[e.code];
+        if (d !== undefined) S.w = d;
+      });
+      addEventListener('keyup', (e) => {
+        K[e.code] = 0;
+      });
+      addEventListener('blur', () => {
+        for (const k in K) K[k] = 0;
+      });
+      // ======================================================================
+      // GAMEPLAY
+      // Movement, weapons, the robot AI and the per-frame update.
+      // ======================================================================
+      function move(e, dx, dy, r) {
+        if (valid(e.x + dx, e.y, r)) e.x += dx;
+        if (valid(e.x, e.y + dy, r)) e.y += dy;
+      }
+      /** Turns angle a toward b by at most rate radians. */
+      function angTo(a, b, rate) {
+        let d = b - a;
+        while (d > Math.PI) d -= TAU;
+        while (d < -Math.PI) d += TAU;
+        return Math.abs(d) < rate ? b : a + Math.sign(d) * rate;
+      }
+      /** Fires the selected weapon: pistol bullet, shotgun spread or thrown molotov. */
+      function shoot() {
+        const w = S.w,
+          fx = Math.cos(P.face),
+          fy = Math.sin(P.face),
+          mx = P.x + fx * 20,
+          my = P.y + fy * 20;
+        if (S.ammo[w] <= 0) {
+          P.cd = 0.35;
+          sfx(120, 0.06, 'square', 0.04);
+          toast('OUT OF ' + WN[w] + ' — visit a shop!');
+          return;
+        }
+        S.ammo[w]--;
+        P.flash = 0.06;
+        if (w == 0) {
+          bul.push({ x: mx, y: my, vx: fx * 950, vy: fy * 950, life: 0.85, dmg: 3, sl: 0.12 });
+          P.cd = 0.32;
+          sfx(900, 0.1, 'square', 0.07, 200);
+        } else if (w == 1) {
+          for (let i = 0; i < 6; i++) {
+            const a = P.face + (Math.random() - 0.5) * 0.4,
+              s = 780 + Math.random() * 120;
+            bul.push({
+              x: mx,
+              y: my,
+              vx: Math.cos(a) * s,
+              vy: Math.sin(a) * s,
+              life: 0.34,
+              dmg: 3.2,
+              sl: 0.35,
+            });
+          }
+          P.cd = 0.85;
+          sfx(160, 0.25, 'sawtooth', 0.1, 40);
+          burst(mx, my, 8, '255,200,90', 140, 1);
+        } else {
+          const dx = R.x - P.x,
+            dy = R.y - P.y,
+            d = Math.max(90, Math.min(230, Math.hypot(dx, dy)));
+          let tx = P.x + fx * d,
+            ty = P.y + fy * d,
+            q = d;
+          while (!valid(tx, ty, 2) && q > 30) {
+            q -= 12;
+            tx = P.x + fx * q;
+            ty = P.y + fy * q;
+          }
+          mols.push({ sx: mx, sy: my, tx, ty, t: 0 });
+          P.cd = 1.3;
+          sfx(400, 0.2, 'triangle', 0.05, 700);
+        }
+      }
+      /** Handles a destroyed robot: score, explosion, stinger and level-clear state. */
+      function killRobot() {
+        R.dead = true;
+        S.kills++;
+        S.score += 1000 * S.level + Math.max(0, Math.floor(90 - S.lt)) * 10;
+        for (let i = 0; i < 5; i++)
+          burst(R.x, R.y, 18, i % 2 ? '255,160,40' : '200,200,200', 260, 1);
+        burst(R.x, R.y, 25, '90,96,108', 200, 0);
+        sfx(90, 0.8, 'sawtooth', 0.14, 25);
+        S.shake = 0.6;
+        playJingle('win');
+        S.mode = 'clear';
+        S.mt = 2.6;
+        bul = [];
+        rb = [];
+        if (S.level == 3) saveBest();
+      }
+      /** Applies damage to the player with a screen shake. */
+      function hurtPlayer(n) {
+        P.hp -= n;
+        S.shake = 0.35;
+        sfx(140, 0.2, 'sawtooth', 0.1, 60);
+      }
+      /** The point the robot steers toward: the player when visible, otherwise around the ring along the hallway centre. */
+      function robotTarget() {
+        let blocked = false;
+        for (let i = 1; i <= 12; i++) {
+          if (maxDot(R.x + ((P.x - R.x) * i) / 12, R.y + ((P.y - R.y) * i) / 12) < AI + 24) {
+            blocked = true;
+            break;
+          }
+        }
+        if (!blocked) return [P.x, P.y];
+        const ar = Math.atan2(R.y - CY, R.x - CX),
+          ap = Math.atan2(P.y - CY, P.x - CX);
+        let d = ap - ar;
+        while (d > Math.PI) d -= TAU;
+        while (d < -Math.PI) d += TAU;
+        if (Math.abs(d) < 2.7) R.dir = Math.sign(d) || 1;
+        const a = ar + R.dir * 0.5,
+          ux = Math.cos(a),
+          uy = Math.sin(a);
+        let m = -9;
+        for (const n of N) m = Math.max(m, ux * n.x + uy * n.y);
+        return [CX + (ux * 225) / m, CY + (uy * 225) / m];
+      }
+      /** True if the straight line between two points avoids the shop block and obstacles. */
+      function clearShot(x1, y1, x2, y2) {
+        for (let i = 1; i < 16; i++) {
+          const x = x1 + ((x2 - x1) * i) / 16,
+            y = y1 + ((y2 - y1) * i) / 16;
+          if (maxDot(x, y) < AI + 2) return false;
+          for (const o of OB) if (Math.hypot(x - o.x, y - o.y) < o.r) return false;
+        }
+        return true;
+      }
+      /** Advances one frame, then applies the robot engine sound. */
+      function update(dt) {
+        engV = 0;
+        updateGame(dt);
+        engineApply();
+      }
+      /** Per-frame game logic for every mode (intro, play, lost, clear, over, win). */
+      function updateGame(dt) {
+        T += dt;
+        S.shake = Math.max(0, S.shake - dt);
+        S.tt -= dt;
+        // particles, bullets, fires always live
+        for (const p of parts) {
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+          p.life -= dt;
+        }
+        parts = parts.filter((p) => p.life > 0);
+        for (const f of fires) {
+          f.life -= dt;
+          if (Math.random() < 0.9)
+            addP(
+              f.x + (Math.random() - 0.5) * f.r * 1.6,
+              f.y + (Math.random() - 0.5) * f.r * 1.2,
+              (Math.random() - 0.5) * 20,
+              -30 - Math.random() * 40,
+              0.5 + Math.random() * 0.4,
+              Math.random() < 0.5 ? '255,140,30' : '255,70,20',
+              4 + Math.random() * 5,
+              1,
+            );
+        }
+        fires = fires.filter((f) => f.life > 0);
+        if (S.mode == 'title') return;
+        if (S.mode == 'over' || S.mode == 'win') S.mt -= dt;
+        if (S.mode == 'intro') {
+          S.mt -= dt;
+          if (S.mt <= 0) S.mode = 'play';
+          return;
+        }
+        if (S.mode == 'lost') {
+          S.mt -= dt;
+          if (S.mt <= 0) {
+            spawn();
+            P.hp = 100;
+            fires = [];
+            mols = [];
+            bul = [];
+            rb = [];
+            R.wind = 0;
+            R.sh = 1.8;
+            S.mode = 'play';
+          }
+          return;
+        }
+        if (S.mode == 'clear') {
+          S.mt -= dt;
+          if (S.mt <= 0) {
+            if (S.level >= 3) {
+              S.mode = 'win';
+              S.mt = 1.2;
+            } else {
+              S.level++;
+              startLevel();
+            }
+          }
+          return;
+        }
+        if (S.mode != 'play') return;
+        S.time += dt;
+        S.lt += dt;
+        S.score += dt * 5;
+        P.cd -= dt;
+        P.inv -= dt;
+        P.flash -= dt;
+        // player
+        const fire = K.Space;
+        let mx = (K.ArrowRight || K.KeyD ? 1 : 0) - (K.ArrowLeft || K.KeyA ? 1 : 0),
+          my = (K.ArrowDown || K.KeyS ? 1 : 0) - (K.ArrowUp || K.KeyW ? 1 : 0);
+        if (Math.hypot(joy.x, joy.y) > 0.25) {
+          mx = joy.x;
+          my = joy.y;
+        }
+        if (fire) {
+          P.aim += dt;
+          P.face = angTo(P.face, Math.atan2(R.y - P.y, R.x - P.x), 9 * dt);
+          if (P.aim > CFG.aimDelay && P.cd <= 0) shoot();
+        } else {
+          P.aim = 0;
+          if (mx || my) {
+            const l = Math.hypot(mx, my);
+            P.face = Math.atan2(my, mx);
+            move(P, (mx / l) * CFG.playerSpeed * dt, (my / l) * CFG.playerSpeed * dt, 11);
+          }
+        }
+        // shops
+        for (let k = 0; k < 6; k++) {
+          S.cool[k] -= dt;
+          if (S.cool[k] > 0) continue;
+          const [x, y] = polar(k, AI + 26);
+          if (Math.hypot(P.x - x, P.y - y) > 42) continue;
+          const t = SH[k].k;
+          let ok = false,
+            msg = '';
+          if (t == 3) {
+            if (P.hp < 100) {
+              P.hp = Math.min(100, P.hp + CFG.medkit);
+              ok = true;
+              msg = '+' + CFG.medkit + ' HEALTH';
+            }
+          } else if (S.ammo[t] < MAXA[t]) {
+            const a = CFG.shopRestock[t];
+            S.ammo[t] = Math.min(MAXA[t], S.ammo[t] + a);
+            ok = true;
+            msg = '+' + a + ' ' + ['PISTOL AMMO', 'SHELLS', 'GAS CANISTERS'][t];
+          }
+          if (ok) {
+            S.cool[k] = CFG.shopCooldown;
+            S.score += 50;
+            toast(msg);
+            sfx(600, 0.12, 'triangle', 0.07, 1000);
+            burst(x, y, 10, '255,230,120', 80, 1);
+          }
+        }
+        // molotovs in flight
+        for (const m of mols) {
+          m.t += dt / 0.55;
+          if (m.t >= 1) {
+            m.done = 1;
+            fires.push({ x: m.tx, y: m.ty, life: 7, max: 7, r: 38 });
+            burst(m.tx, m.ty, 16, '255,150,40', 160, 1);
+            sfx(200, 0.4, 'sawtooth', 0.08, 50);
+          }
+        }
+        mols = mols.filter((m) => !m.done);
+        // bullets
+        for (const b of bul) {
+          for (let s = 0; s < 3 && !b.dead; s++) {
+            b.x += (b.vx * dt) / 3;
+            b.y += (b.vy * dt) / 3;
+            if (!R.dead && Math.hypot(b.x - R.x, b.y - R.y) < 17) {
+              b.dead = 1;
+              R.hp -= b.dmg;
+              R.slow = Math.max(R.slow, b.sl);
+              S.score += 10;
+              burst(b.x, b.y, 4, '255,230,120', 90, 1);
+              sfx(300, 0.05, 'square', 0.03);
+              if (R.hp <= 0) killRobot();
+              break;
+            }
+            const m = maxDot(b.x, b.y);
+            if (m > AO || m < AI) {
+              b.dead = 1;
+              burst(b.x, b.y, 3, '200,200,200', 60);
+              break;
+            }
+            for (const o of OB)
+              if (Math.hypot(b.x - o.x, b.y - o.y) < o.r) {
+                b.dead = 1;
+                burst(b.x, b.y, 3, '230,230,230', 60);
+                break;
+              }
+          }
+          b.life -= dt;
+          if (b.life <= 0) b.dead = 1;
+        }
+        bul = bul.filter((b) => !b.dead);
+        if (S.mode != 'play') return;
+        // robot bolts
+        for (const b of rb) {
+          b.x += b.vx * dt;
+          b.y += b.vy * dt;
+          b.life -= dt;
+          if (b.life <= 0) b.dead = 1;
+          if (P.inv <= 0 && Math.hypot(b.x - P.x, b.y - P.y) < 15) {
+            b.dead = 1;
+            hurtPlayer(12);
+            P.inv = 0.5;
+            burst(P.x, P.y, 10, '255,90,60', 150, 1);
+            continue;
+          }
+          const m = maxDot(b.x, b.y);
+          if (m > AO || m < AI) {
+            b.dead = 1;
+            burst(b.x, b.y, 5, '255,120,80', 90, 1);
+            continue;
+          }
+          for (const o of OB)
+            if (Math.hypot(b.x - o.x, b.y - o.y) < o.r) {
+              b.dead = 1;
+              burst(b.x, b.y, 5, '255,120,80', 90, 1);
+              break;
+            }
+        }
+        rb = rb.filter((b) => !b.dead);
+        // fire damage
+        for (const f of fires) {
+          if (Math.hypot(P.x - f.x, P.y - f.y) < f.r) {
+            P.hp -= 14 * dt;
+            if (Math.random() < 0.2) sfx(90, 0.08, 'sawtooth', 0.02);
+          }
+          if (!R.dead && Math.hypot(R.x - f.x, R.y - f.y) < f.r + 8) {
+            R.hp -= 12 * dt;
+            if (R.hp <= 0) {
+              killRobot();
+              return;
+            }
+          }
+        }
+        // robot
+        R.slow -= dt;
+        R.cd -= dt;
+        R.sh -= dt;
+        if (R.wind > 0) {
+          R.wind -= dt;
+          R.face = angTo(R.face, Math.atan2(P.y - R.y, P.x - R.x), 12 * dt);
+          if (R.wind <= 0) {
+            const a = R.face;
+            rb.push({
+              x: R.x + Math.cos(a) * 24,
+              y: R.y + Math.sin(a) * 24,
+              vx: Math.cos(a) * 340,
+              vy: Math.sin(a) * 340,
+              life: 2.2,
+            });
+            sfx(700, 0.18, 'sawtooth', 0.06, 150);
+          }
+        } else if (
+          R.sh <= 0 &&
+          R.pause <= 0 &&
+          Math.hypot(P.x - R.x, P.y - R.y) < 520 &&
+          clearShot(R.x, R.y, P.x, P.y)
+        ) {
+          R.wind = 0.4;
+          R.sh = CFG.robotShotInterval[S.level - 1];
+          sfx(300, 0.4, 'triangle', 0.04, 900);
+        }
+        let sp = R.sp * (R.slow > 0 ? 0.55 : 1);
+        if (R.pause > 0) {
+          R.pause -= dt;
+          sp = 0;
+        }
+        if (R.wind > 0) sp = 0;
+        if (sp > 0) {
+          if (R.rev > 0) {
+            const st = Math.min(R.rev, sp * 0.8 * dt),
+              nx = R.x - Math.cos(R.face) * st,
+              ny = R.y - Math.sin(R.face) * st;
+            if (valid(nx, ny, 15)) {
+              R.x = nx;
+              R.y = ny;
+              R.rev -= st;
+            } else R.rev = 0;
+            if (R.rev <= 0.5) {
+              R.rev = 0;
+              R.side = -R.side;
+              R.stk = 0;
+            }
+          } else {
+            const [tx, ty] = robotTarget();
+            let dx = tx - R.x,
+              dy = ty - R.y;
+            const dl = Math.hypot(dx, dy) || 1;
+            dx /= dl;
+            dy /= dl;
+            const tdx = dx,
+              tdy = dy;
+            let bn = N[0],
+              bm = -1e9;
+            for (const n of N) {
+              const d = (R.x - CX) * n.x + (R.y - CY) * n.y;
+              if (d > bm) {
+                bm = d;
+                bn = n;
+              }
+            }
+            const cw = (dl > 220 ? 0.8 : 0.25) * Math.max(-1, Math.min(1, (225 - bm) / 60));
+            dx += bn.x * cw;
+            dy += bn.y * cw;
+            const base = Math.atan2(dy, dx),
+              ox = R.x,
+              oy = R.y;
+            for (const off of R.side > 0
+              ? [0, 0.5, -0.5, 1, -1, 1.6, -1.6]
+              : [0, -0.5, 0.5, -1, 1, -1.6, 1.6]) {
+              const a = base + off,
+                nx = R.x + Math.cos(a) * sp * dt,
+                ny = R.y + Math.sin(a) * sp * dt;
+              if (valid(nx, ny, 15)) {
+                R.x = nx;
+                R.y = ny;
+                R.face = angTo(R.face, a, 10 * dt);
+                break;
+              }
+            }
+            const prog = ((R.x - ox) * tdx + (R.y - oy) * tdy) / (sp * dt);
+            if (prog < 0.25) R.stk += dt;
+            else R.stk = Math.max(0, R.stk - dt * 2);
+            if (R.stk > 0.35) {
+              R.rev = 96;
+              R.stk = 0;
+              sfx(820, 0.12, 'square', 0.04);
+            }
+          }
+        } else R.face = angTo(R.face, Math.atan2(P.y - R.y, P.x - R.x), 6 * dt);
+        {
+          const dd = Math.hypot(P.x - R.x, P.y - R.y),
+            prox = Math.max(0, 1 - dd / 650);
+          if (sp > 0) {
+            engV = 0.05 + 0.11 * prox;
+            engF = 44 + sp * 0.2;
+          } else engV = 0.025;
+          R.ck -= dt;
+          if (dd < 700 && R.ck <= 0 && clearShot(R.x, R.y, P.x, P.y)) {
+            R.ck = 1.8;
+            clank(0.4 + 0.6 * prox);
+          }
+        }
+        if (Math.hypot(P.x - R.x, P.y - R.y) < 28 && P.inv <= 0 && R.cd <= 0) {
+          hurtPlayer(22);
+          P.inv = 1;
+          R.cd = 0.9;
+          R.pause = 0.45;
+          const a = Math.atan2(P.y - R.y, P.x - R.x);
+          for (let d = 34; d > 0; d -= 6)
+            if (valid(P.x + Math.cos(a) * d, P.y + Math.sin(a) * d, 11)) {
+              P.x += Math.cos(a) * d;
+              P.y += Math.sin(a) * d;
+              break;
+            }
+          burst(P.x, P.y, 10, '255,60,60', 150, 1);
+        }
+        if (P.hp <= 0) {
+          P.hp = 0;
+          S.lives--;
+          burst(P.x, P.y, 25, '255,60,60', 220, 1);
+          sfx(110, 0.7, 'sawtooth', 0.12, 30);
+          playJingle('lose');
+          if (S.lives <= 0) {
+            S.mode = 'over';
+            S.mt = 1.2;
+            saveBest();
+          } else {
+            S.mode = 'lost';
+            S.mt = 1.8;
+          }
+        }
+      }
+      // ======================================================================
+      // RENDERING AND HUD
+      // ======================================================================
+      function txt(s, x, y, size, col, al = 'left', w = 'bold') {
+        g.font = w + ' ' + size + 'px ' + FONT;
+        g.textAlign = al;
+        g.textBaseline = 'middle';
+        g.fillStyle = col;
+        g.fillText(s, x, y);
+      }
+      const fmt = (s) =>
+        String(Math.floor(s / 60)).padStart(2, '0') +
+        ':' +
+        String(Math.floor(s % 60)).padStart(2, '0');
+      /** Draws the player, muzzle flash and the aim ring and line while firing. */
+      function drawPlayer() {
+        if (P.inv > 0 && S.mode == 'play' && Math.floor(T * 14) % 2) return;
+        g.save();
+        g.translate(P.x, P.y);
+        g.fillStyle = 'rgba(0,0,0,.3)';
+        g.beginPath();
+        g.ellipse(2, 5, 13, 10, 0, 0, TAU);
+        g.fill();
+        g.rotate(P.face);
+        g.fillStyle = '#1d4f9c';
+        g.beginPath();
+        g.ellipse(0, 0, 7, 13, 0, 0, TAU);
+        g.fill();
+        g.fillStyle = '#2f6fd1';
+        g.beginPath();
+        g.ellipse(0, 0, 6, 11, 0, 0, TAU);
+        g.fill();
+        g.fillStyle = '#f0c59a';
+        g.fillRect(2, -12, 12, 4);
+        g.fillRect(2, 8, 10, 4);
+        if (S.w == 0) {
+          g.fillStyle = '#22262b';
+          g.fillRect(10, -2, 12, 4);
+          g.fillStyle = '#454c55';
+          g.fillRect(10, -2, 8, 2);
+        } else if (S.w == 1) {
+          g.fillStyle = '#4a3524';
+          g.fillRect(8, -2, 10, 5);
+          g.fillStyle = '#22262b';
+          g.fillRect(16, -2, 15, 4);
+          g.fillRect(16, 2, 15, 2);
+        } else {
+          g.fillStyle = '#3fae6a';
+          g.beginPath();
+          g.arc(15, 0, 5, 0, TAU);
+          g.fill();
+          g.fillStyle = '#fff';
+          g.fillRect(14, -2, 6, 2);
+        }
+        g.fillStyle = '#f0c59a';
+        g.beginPath();
+        g.arc(0, 0, 7, 0, TAU);
+        g.fill();
+        g.fillStyle = '#3a2a1e';
+        g.beginPath();
+        g.arc(-1.5, 0, 6.5, Math.PI * 0.4, Math.PI * 1.6);
+        g.fill();
+        if (P.flash > 0) {
+          g.fillStyle = '#ffe9a0';
+          g.shadowColor = '#ffb030';
+          g.shadowBlur = 16;
+          g.beginPath();
+          g.arc(S.w == 1 ? 34 : 25, 0, 7, 0, TAU);
+          g.fill();
+          g.shadowBlur = 0;
+        }
+        g.restore();
+        if (S.mode == 'play' && K.Space) {
+          const p = Math.min(1, P.aim / CFG.aimDelay);
+          g.strokeStyle = p < 1 ? 'rgba(255,220,80,.9)' : 'rgba(255,60,60,.95)';
+          g.lineWidth = 3;
+          g.beginPath();
+          g.arc(P.x, P.y, 19, -Math.PI / 2, -Math.PI / 2 + TAU * p);
+          g.stroke();
+          g.setLineDash([5, 7]);
+          g.strokeStyle = 'rgba(255,60,60,.5)';
+          g.lineWidth = 1.5;
+          g.beginPath();
+          g.moveTo(P.x, P.y);
+          g.lineTo(
+            P.x + Math.cos(P.face) * (S.w == 2 ? 230 : S.w == 1 ? 260 : 520),
+            P.y + Math.sin(P.face) * (S.w == 2 ? 230 : S.w == 1 ? 260 : 520),
+          );
+          g.stroke();
+          g.setLineDash([]);
+        }
+      }
+      /** Draws the robot, its charging glow and health bar. */
+      function drawRobot() {
+        if (R.dead) return;
+        g.save();
+        g.translate(R.x, R.y);
+        g.fillStyle = 'rgba(0,0,0,.3)';
+        g.beginPath();
+        g.ellipse(2, 6, 20, 15, 0, 0, TAU);
+        g.fill();
+        g.rotate(R.face);
+        g.fillStyle = '#22262d';
+        g.fillRect(-15, -19, 30, 8);
+        g.fillRect(-15, 11, 30, 8);
+        g.fillStyle = '#3a414b';
+        for (let i = -12; i < 14; i += 6) {
+          g.fillRect(i, -19, 2, 8);
+          g.fillRect(i, 11, 2, 8);
+        }
+        g.fillStyle = '#5d6672';
+        g.fillRect(4, -16, 18, 5);
+        g.fillRect(4, 11, 18, 5);
+        g.fillStyle = '#c0c8d4';
+        g.fillRect(20, -17, 5, 3);
+        g.fillRect(20, 14, 5, 3);
+        g.fillStyle = '#8a94a3';
+        g.strokeStyle = '#2b3038';
+        g.lineWidth = 2;
+        g.beginPath();
+        for (let i = 0; i < 6; i++) {
+          const a = (i * Math.PI) / 3;
+          g.lineTo(Math.cos(a) * 16, Math.sin(a) * 16);
+        }
+        g.closePath();
+        g.fill();
+        g.stroke();
+        g.fillStyle = '#a9b3c1';
+        g.beginPath();
+        g.arc(-2, 0, 9, 0, TAU);
+        g.fill();
+        const pulse = 0.6 + 0.4 * Math.sin(T * 10);
+        g.fillStyle = '#ff2a2a';
+        g.shadowColor = '#ff0000';
+        g.shadowBlur = 10 + 8 * pulse;
+        g.fillRect(6, -4, 7, 8);
+        g.shadowBlur = 0;
+        if (R.wind > 0) {
+          const c = 1 - R.wind / 0.4;
+          g.fillStyle = 'rgba(255,120,70,.9)';
+          g.shadowColor = '#ff3a20';
+          g.shadowBlur = 16;
+          g.beginPath();
+          g.arc(25, 0, 3 + c * 7, 0, TAU);
+          g.fill();
+          g.shadowBlur = 0;
+        }
+        g.restore();
+        const w = 36,
+          x = R.x - w / 2,
+          y = R.y - 30;
+        g.fillStyle = 'rgba(0,0,0,.7)';
+        g.fillRect(x - 1, y - 1, w + 2, 6);
+        g.fillStyle = '#e23b3b';
+        g.fillRect(x, y, w * Math.max(0, R.hp / R.max), 4);
+      }
+      /** Renders one frame of the world, then the HUD. */
+      function draw() {
+        g.save();
+        if (S.shake > 0)
+          g.translate((Math.random() - 0.5) * 10 * S.shake, (Math.random() - 0.5) * 10 * S.shake);
+        g.drawImage(bg, 0, 0);
+        // shop markers
+        for (let k = 0; k < 6; k++) {
+          const [x, y] = polar(k, AI + 26),
+            ready = S.cool[k] <= 0;
+          g.save();
+          if (ready) {
+            g.globalAlpha = 0.3 + 0.2 * Math.sin(T * 4 + k);
+            g.fillStyle = SH[k].c;
+            g.beginPath();
+            g.arc(x, y, 24, 0, TAU);
+            g.fill();
+            g.globalAlpha = 1;
+            g.strokeStyle = SH[k].c;
+            g.lineWidth = 2;
+            g.beginPath();
+            g.arc(x, y, 24, 0, TAU);
+            g.stroke();
+            txt('$', x, y + 1, 18, '#fff', 'center');
+          } else {
+            g.strokeStyle = 'rgba(80,80,90,.8)';
+            g.lineWidth = 4;
+            g.beginPath();
+            g.arc(x, y, 20, -Math.PI / 2, -Math.PI / 2 + TAU * (1 - S.cool[k] / CFG.shopCooldown));
+            g.stroke();
+            txt('CLOSED', x, y + 1, 8, '#555', 'center');
+          }
+          g.restore();
+        }
+        for (const f of fires) {
+          const a = Math.min(1, f.life / 1.5),
+            gr = g.createRadialGradient(f.x, f.y, 2, f.x, f.y, f.r + 6);
+          gr.addColorStop(0, `rgba(255,200,70,${0.75 * a})`);
+          gr.addColorStop(0.6, `rgba(255,100,20,${0.5 * a})`);
+          gr.addColorStop(1, 'rgba(60,20,10,0)');
+          g.fillStyle = gr;
+          g.beginPath();
+          g.arc(f.x, f.y, f.r + 6, 0, TAU);
+          g.fill();
+        }
+        for (const m of mols) {
+          const t = m.t,
+            x = m.sx + (m.tx - m.sx) * t,
+            y = m.sy + (m.ty - m.sy) * t - Math.sin(Math.PI * t) * 45;
+          g.fillStyle = 'rgba(0,0,0,.25)';
+          g.beginPath();
+          g.ellipse(m.sx + (m.tx - m.sx) * t, m.sy + (m.ty - m.sy) * t, 6, 4, 0, 0, TAU);
+          g.fill();
+          g.save();
+          g.translate(x, y);
+          g.rotate(T * 14);
+          g.fillStyle = '#3fae6a';
+          g.fillRect(-3, -6, 6, 12);
+          g.fillStyle = '#ddd';
+          g.fillRect(-1, -9, 2, 4);
+          g.restore();
+          addP(x, y, 0, 0, 0.25, '255,160,40', 3, 1);
+        }
+        drawRobot();
+        drawPlayer();
+        g.globalCompositeOperation = 'lighter';
+        for (const b of rb) {
+          const gr = g.createRadialGradient(b.x, b.y, 0, b.x, b.y, 14);
+          gr.addColorStop(0, 'rgba(255,240,200,1)');
+          gr.addColorStop(0.35, 'rgba(255,70,40,.8)');
+          gr.addColorStop(1, 'rgba(255,40,20,0)');
+          g.fillStyle = gr;
+          g.beginPath();
+          g.arc(b.x, b.y, 14, 0, TAU);
+          g.fill();
+          g.strokeStyle = 'rgba(255,90,60,.7)';
+          g.lineWidth = 4;
+          g.beginPath();
+          g.moveTo(b.x, b.y);
+          g.lineTo(b.x - b.vx * 0.05, b.y - b.vy * 0.05);
+          g.stroke();
+        }
+        g.globalCompositeOperation = 'source-over';
+        for (const b of bul) {
+          g.strokeStyle = b.dmg > 3.1 && b.life < 0.4 ? '#ffd27a' : '#fff2b0';
+          g.lineWidth = 2;
+          g.beginPath();
+          g.moveTo(b.x, b.y);
+          g.lineTo(b.x - b.vx * 0.02, b.y - b.vy * 0.02);
+          g.stroke();
+        }
+        for (const p of parts) {
+          g.globalCompositeOperation = p.add ? 'lighter' : 'source-over';
+          g.fillStyle = `rgba(${p.col},${Math.max(0, p.life / p.max) * (p.add ? 0.8 : 1)})`;
+          g.beginPath();
+          g.arc(p.x, p.y, p.size * (p.add ? p.life / p.max + 0.3 : 1), 0, TAU);
+          g.fill();
+        }
+        g.globalCompositeOperation = 'source-over';
+        g.restore();
+        hud();
+      }
+      /** Draws the top bar, weapon slots, hints and the title / banner screens. */
+      function hud() {
+        g.fillStyle = 'rgba(10,8,16,.9)';
+        g.fillRect(0, 0, W, 80);
+        g.fillStyle = '#c9a24b';
+        g.fillRect(0, 78, W, 2);
+        txt('SCORE', 24, 24, 13, '#9a93b0');
+        txt(String(Math.floor(S.score)).padStart(6, '0'), 24, 50, 30, '#ffd45c');
+        txt('LEVEL', 200, 24, 13, '#9a93b0');
+        txt(S.level + ' / 3', 200, 50, 26, '#fff');
+        txt('LIVES', 310, 24, 13, '#9a93b0');
+        for (let i = 0; i < 3; i++)
+          txt('♥', 312 + i * 28, 52, 28, i < S.lives ? '#ff4466' : '#3a3345');
+        txt('HEALTH', 430, 24, 13, '#9a93b0');
+        g.fillStyle = '#2a2535';
+        g.fillRect(430, 40, 150, 18);
+        g.fillStyle = P.hp > 35 ? '#4ad07a' : '#e23b3b';
+        g.fillRect(430, 40, (150 * P.hp) / 100, 18);
+        g.strokeStyle = '#6a6285';
+        g.strokeRect(430, 40, 150, 18);
+        txt('TIME', 620, 24, 13, '#9a93b0');
+        txt(fmt(S.time), 620, 50, 26, '#fff');
+        txt('ROBOTS', 710, 24, 13, '#9a93b0');
+        txt(String(S.kills), 710, 50, 26, '#fff');
+        txt('BEST', 800, 24, 13, '#9a93b0');
+        if (best) {
+          txt(String(best.score).padStart(6, '0'), 800, 45, 16, '#ffd45c');
+          txt(fmt(best.time) + ' · ' + best.kills + ' bots', 800, 63, 12, '#b9b2cf');
+        } else txt('—', 800, 50, 20, '#555');
+        // weapon bar
+        for (let i = 0; i < 3; i++) {
+          const x = W / 2 - 195 + i * 135,
+            sel = S.w == i,
+            low = S.ammo[i] == 0;
+          g.fillStyle = sel ? 'rgba(255,212,92,.2)' : 'rgba(10,8,16,.8)';
+          rr(g, x, 712, 125, 40, 8);
+          g.fill();
+          g.strokeStyle = sel ? '#ffd45c' : '#4a4560';
+          g.lineWidth = sel ? 3 : 1.5;
+          g.stroke();
+          txt(i + 1 + '', x + 14, 732, 20, sel ? '#ffd45c' : '#8d86a6', 'center');
+          txt(WN[i], x + 28, 725, 11, '#cfc9e6');
+          txt('× ' + S.ammo[i], x + 28, 741, 15, low ? '#ff5a5a' : '#fff');
+        }
+        txt(
+          touchUI
+            ? 'LEFT STICK move   ·   hold FIRE to stop, aim & shoot   ·   tap 1 2 3 to change weapon   ·   $ doors restock'
+            : 'WASD / ARROWS move   ·   hold SPACE to stop, aim & fire   ·   1 2 3 weapons   ·   $ doors restock   ·   M mute',
+          W / 2,
+          696,
+          12,
+          '#a89fc7',
+          'center',
+          'normal',
+        );
+        if (S.tt > 0 && S.mode == 'play') {
+          g.globalAlpha = Math.min(1, S.tt);
+          txt(S.toast, W / 2, 112, 22, '#fff', 'center');
+          g.globalAlpha = 1;
+        }
+        const band = (a, b, c) => {
+          g.fillStyle = 'rgba(8,6,14,.7)';
+          g.fillRect(0, 300, W, 170);
+          txt(a, W / 2, 360, 56, c, 'center');
+          if (b) txt(b, W / 2, 425, 20, '#d8d2ee', 'center', 'normal');
+        };
+        if (S.mode == 'intro')
+          band(
+            'LEVEL ' + S.level,
+            S.level == 1
+              ? 'You are unarmed — grab ammo from a shop ($) before the robot gets you!'
+              : 'Robot #' + S.level + ' is online — stay moving, find a gap, then shoot.',
+            '#ffd45c',
+          );
+        else if (S.mode == 'lost') band('LIFE LOST', S.lives + ' left', '#ff4466');
+        else if (S.mode == 'clear')
+          band('ROBOT DESTROYED', '+' + 1000 * S.level + ' and a speed bonus', '#4ad07a');
+        else if (S.mode == 'over' || S.mode == 'win' || S.mode == 'title') {
+          g.fillStyle = 'rgba(8,6,14,.82)';
+          g.fillRect(0, 80, W, 680);
+          if (S.mode == 'title') {
+            g.shadowColor = '#ff2a8a';
+            g.shadowBlur = 24;
+            txt('CHOPPING', W / 2, 215, 92, '#ff5ca8', 'center');
+            g.shadowColor = '#1ab0ff';
+            txt('MALL', W / 2, 305, 92, '#5cd6ff', 'center');
+            g.shadowBlur = 0;
+            txt(
+              'A killer robot is loose in the mall. Survive three levels.',
+              W / 2,
+              385,
+              20,
+              '#e6e1f7',
+              'center',
+              'normal',
+            );
+            [
+              touchUI ? 'LEFT STICK — move' : 'WASD / ARROWS — move',
+              touchUI ? 'FIRE button — stop, aim and shoot' : 'SPACE — stop, aim and fire',
+              touchUI ? 'Tap 1 PISTOL   2 SHOTGUN   3 MOLOTOV' : '1 PISTOL   2 SHOTGUN   3 MOLOTOV',
+              'You start with NO ammo — get it at the shop doors ($)',
+              'Fire burns the robot — and you',
+              'The robot fires energy bolts — dodge them or break line of sight',
+            ].forEach((s, i) => txt(s, W / 2, 440 + i * 28, 17, '#b9b2cf', 'center', 'normal'));
+            txt(
+              touchUI ? 'TAP TO START' : 'PRESS ENTER OR SPACE TO START',
+              W / 2,
+              625,
+              26,
+              '#ffd45c',
+              'center',
+            );
+          } else {
+            txt(
+              S.mode == 'win' ? 'MALL SECURED' : 'GAME OVER',
+              W / 2,
+              230,
+              72,
+              S.mode == 'win' ? '#4ad07a' : '#ff4466',
+              'center',
+            );
+            txt(
+              'SCORE ' + String(Math.floor(S.score)).padStart(6, '0'),
+              W / 2,
+              320,
+              38,
+              '#ffd45c',
+              'center',
+            );
+            txt(
+              'Time ' + fmt(S.time) + '   ·   Robots destroyed ' + S.kills + ' / 3',
+              W / 2,
+              375,
+              22,
+              '#e6e1f7',
+              'center',
+              'normal',
+            );
+            if (best)
+              txt(
+                'BEST  ' +
+                  String(best.score).padStart(6, '0') +
+                  '  ·  ' +
+                  fmt(best.time) +
+                  '  ·  ' +
+                  best.kills +
+                  ' robots',
+                W / 2,
+                425,
+                20,
+                '#b9b2cf',
+                'center',
+                'normal',
+              );
+            txt(
+              touchUI ? 'TAP TO PLAY AGAIN' : 'PRESS R TO PLAY AGAIN',
+              W / 2,
+              520,
+              30,
+              '#fff',
+              'center',
+            );
+          }
+        }
+      }
+      // ======================================================================
+      // TOUCH CONTROLS AND MAIN LOOP
+      // On-screen joystick and buttons for phones and tablets, then the animation loop.
+      // ======================================================================
+      let touchUI = false;
+      const joy = { x: 0, y: 0 };
+      const el = (id) => document.getElementById(id);
+      /** Reveals the on-screen controls. */
+      function showTouch() {
+        touchUI = true;
+        document.body.classList.add('touch');
+      }
+      if (matchMedia('(pointer:coarse)').matches) showTouch();
+      addEventListener('pointerdown', (e) => {
+        if (e.pointerType == 'touch' && !touchUI) showTouch();
+      });
+      /** Creates or resumes the audio context (must run from a user gesture). */
+      function initAudio() {
+        if (!AC)
+          try {
+            AC = new (window.AudioContext || window.webkitAudioContext)();
+          } catch (_) {}
+        if (AC && AC.state == 'suspended') AC.resume();
+      }
+      ['touchend', 'pointerup', 'click'].forEach((ev) =>
+        addEventListener(ev, initAudio, { passive: true }),
+      );
+      addEventListener('contextmenu', (e) => e.preventDefault());
+      /** Starts or restarts the game from a tap on the title or end screens. */
+      function tapStart() {
+        if (S.mode == 'title' || ((S.mode == 'over' || S.mode == 'win') && S.mt <= 0)) {
+          initAudio();
+          newGame();
+          return true;
+        }
+        return false;
+      }
+      cv.addEventListener('pointerup', tapStart);
+      (function () {
+        const base = el('joy'),
+          knob = el('knob');
+        let id = null;
+        const upd = (e) => {
+          const r = base.getBoundingClientRect(),
+            R = r.width / 2;
+          let dx = (e.clientX - r.left - R) / R,
+            dy = (e.clientY - r.top - R) / R;
+          const l = Math.hypot(dx, dy);
+          if (l > 1) {
+            dx /= l;
+            dy /= l;
+          }
+          joy.x = dx;
+          joy.y = dy;
+          knob.style.transform = 'translate(' + dx * R * 0.55 + 'px,' + dy * R * 0.55 + 'px)';
+        };
+        base.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          id = e.pointerId;
+          base.setPointerCapture(id);
+          upd(e);
+        });
+        base.addEventListener('pointermove', (e) => {
+          if (e.pointerId === id) upd(e);
+        });
+        const end = (e) => {
+          if (e.pointerId === id) {
+            id = null;
+            joy.x = joy.y = 0;
+            knob.style.transform = '';
+          }
+        };
+        base.addEventListener('pointerup', end);
+        base.addEventListener('pointercancel', end);
+        const fire = el('fire'),
+          fe = () => {
+            K.Space = 0;
+            fire.classList.remove('on');
+          };
+        fire.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          fire.setPointerCapture(e.pointerId);
+          if (tapStart()) return;
+          K.Space = 1;
+          fire.classList.add('on');
+        });
+        ['pointerup', 'pointercancel', 'lostpointercapture'].forEach((ev) =>
+          fire.addEventListener(ev, fe),
+        );
+        document.querySelectorAll('.wp').forEach((b) =>
+          b.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            S.w = +b.dataset.w;
+          }),
+        );
+        el('bm').addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          initAudio();
+          mute = !mute;
+          if (mus.gain) mus.gain.gain.value = mute ? 0 : 0.45;
+        });
+        el('br').addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          initAudio();
+          newGame();
+        });
+      })();
+      const wbtn = [...document.querySelectorAll('.wp')];
+      /** Updates the touch buttons (selected weapon, ammo counts, mute state). */
+      function syncUI() {
+        if (!touchUI) return;
+        wbtn.forEach((b, i) => {
+          b.classList.toggle('sel', S.w == i);
+          const t = String(S.ammo[i]);
+          if (b._a !== t) {
+            b._a = t;
+            b.querySelector('small').textContent = t;
+          }
+        });
+        el('bm').classList.toggle('off', mute);
+      }
+      let last = performance.now();
+      (function loop(n) {
+        const dt = Math.min(0.033, (n - last) / 1000);
+        last = n;
+        update(dt);
+        draw();
+        syncUI();
+        requestAnimationFrame(loop);
+      })(last);
+    </script>
+  </body>
+</html>
