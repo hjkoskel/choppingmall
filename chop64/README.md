@@ -5,7 +5,7 @@ A "tuned down" version of the game in C that compiles to a real C64 program with
 `double` maths, a 960×760 vector renderer and a Web-Audio-style synth, none of which exist on a 1 MHz 6502
 with 64 KB and no FPU. The game *rules* are the same; everything around them was redesigned.
 
-[![chopping mall on C64](c64gameplay.png)](https://www.youtube.com/watch?v=DXlQ4oVlqAs "gameplay")
+[![chopping mall on C64](c64gameplay.png)](https://www.youtube.com/watch?v=eLL3L_sx1Ug "gameplay")
 
 ## Build and run
 ```
