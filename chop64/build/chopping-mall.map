@@ -1,0 +1,962 @@
+Modules list:
+-------------
+plat_c64.o:
+    CODE              Offs=000000  Size=001C27  Align=00001  Fill=0000
+    RODATA            Offs=000000  Size=005046  Align=00001  Fill=0000
+    BSS               Offs=000000  Size=000087  Align=00001  Fill=0000
+    DATA              Offs=000000  Size=000016  Align=00001  Fill=0000
+core.o:
+    CODE              Offs=001C27  Size=003739  Align=00001  Fill=0000
+    RODATA            Offs=005046  Size=0005A2  Align=00001  Fill=0000
+    BSS               Offs=000087  Size=000A8A  Align=00001  Fill=0000
+mcfont.o:
+    CODE              Offs=005360  Size=0000A4  Align=00001  Fill=0000
+    BSS               Offs=000B11  Size=000001  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(add.o):
+    CODE              Offs=005404  Size=00001C  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(addeqsp.o):
+    CODE              Offs=005420  Size=000011  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(addysp.o):
+    CODE              Offs=005431  Size=00000E  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(aslax2.o):
+    CODE              Offs=00543F  Size=00000B  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(aslax3.o):
+    CODE              Offs=00544A  Size=00000E  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(aslax4.o):
+    CODE              Offs=005458  Size=000011  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(asrax1.o):
+    CODE              Offs=005469  Size=00000A  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(asrax3.o):
+    CODE              Offs=005473  Size=000014  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(asrax4.o):
+    CODE              Offs=005487  Size=000019  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(axlong.o):
+    CODE              Offs=0054A0  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(bneg.o):
+    CODE              Offs=0054AD  Size=00000E  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(callmain.o):
+    CODE              Offs=0054BB  Size=000017  Align=00001  Fill=0000
+    DATA              Offs=000016  Size=000004  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(compl.o):
+    CODE              Offs=0054D2  Size=000009  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(condes.o):
+    CODE              Offs=0054DB  Size=00000C  Align=00001  Fill=0000
+    DATA              Offs=00001A  Size=000025  Align=00001  Fill=0000
+    ONCE              Offs=000000  Size=00000C  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(crt0.o):
+    STARTUP           Offs=000000  Size=000033  Align=00001  Fill=0000
+    ONCE              Offs=00000C  Size=00001A  Align=00001  Fill=0000
+    INIT              Offs=000000  Size=00001C  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(decsp2.o):
+    CODE              Offs=0054E7  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(decsp3.o):
+    CODE              Offs=0054F4  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(decsp4.o):
+    CODE              Offs=005501  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(decsp5.o):
+    CODE              Offs=00550E  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(decsp6.o):
+    CODE              Offs=00551B  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(decsp7.o):
+    CODE              Offs=005528  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(decsp8.o):
+    CODE              Offs=005535  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(div.o):
+    CODE              Offs=005542  Size=000015  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(exehdr.o):
+    EXEHDR            Offs=000000  Size=00000C  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(icmp.o):
+    CODE              Offs=005557  Size=00002E  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(incsp1.o):
+    CODE              Offs=005585  Size=000007  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(incsp2.o):
+    CODE              Offs=00558C  Size=000016  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(incsp3.o):
+    CODE              Offs=0055A2  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(incsp4.o):
+    CODE              Offs=0055A7  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(incsp5.o):
+    CODE              Offs=0055AC  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(incsp6.o):
+    CODE              Offs=0055B1  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(incsp7.o):
+    CODE              Offs=0055B6  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(incsp8.o):
+    CODE              Offs=0055BB  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(kernal.o):
+/usr/share/cc65/lib/c64.lib(ladd.o):
+    CODE              Offs=0055C0  Size=000025  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(laddeq.o):
+    CODE              Offs=0055E5  Size=00002D  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(lcmp.o):
+    CODE              Offs=005612  Size=00003B  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(ldai.o):
+    CODE              Offs=00564D  Size=00000C  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(ldeaxysp.o):
+    CODE              Offs=005659  Size=000013  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(lmul.o):
+    CODE              Offs=00566C  Size=00005C  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(lne.o):
+    CODE              Offs=0056C8  Size=000006  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(loadaddr.o):
+    LOADADDR          Offs=000000  Size=000002  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(lpush.o):
+    CODE              Offs=0056CE  Size=000021  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(ludiv.o):
+    CODE              Offs=0056EF  Size=00007A  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(lumod.o):
+    CODE              Offs=005769  Size=000019  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(makebool.o):
+    CODE              Offs=005782  Size=00002C  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(memcpy.o):
+    CODE              Offs=0057AE  Size=00003C  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(memset.o):
+    CODE              Offs=0057EA  Size=00005D  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(mul.o):
+    CODE              Offs=005847  Size=000045  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(mul8.o):
+    CODE              Offs=00588C  Size=00003A  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(mulax3.o):
+    CODE              Offs=0058C6  Size=000011  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(mulax6.o):
+    CODE              Offs=0058D7  Size=000016  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(mulax7.o):
+    CODE              Offs=0058ED  Size=000019  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(mulax9.o):
+    CODE              Offs=005906  Size=000017  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(negabs.o):
+    CODE              Offs=00591D  Size=000012  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(popptr1.o):
+    CODE              Offs=00592F  Size=00000E  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(pusha.o):
+    CODE              Offs=00593D  Size=000016  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(pushax.o):
+    CODE              Offs=005953  Size=00001A  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(pushwsp.o):
+    CODE              Offs=00596D  Size=00001C  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(shelp.o):
+    CODE              Offs=005989  Size=000020  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(shrax1.o):
+    CODE              Offs=0059A9  Size=000008  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(shrax3.o):
+    CODE              Offs=0059B1  Size=00000E  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(shrax4.o):
+    CODE              Offs=0059BF  Size=000011  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(staspidx.o):
+    CODE              Offs=0059D0  Size=000016  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(status.o):
+/usr/share/cc65/lib/c64.lib(staxsp.o):
+    CODE              Offs=0059E6  Size=00000B  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(staxspi.o):
+    CODE              Offs=0059F1  Size=00001B  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(steaxsp.o):
+    CODE              Offs=005A0C  Size=000015  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(strlen.o):
+    CODE              Offs=005A21  Size=000016  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(sub.o):
+    CODE              Offs=005A37  Size=000015  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(subeqsp.o):
+    CODE              Offs=005A4C  Size=000015  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(subysp.o):
+    CODE              Offs=005A61  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(udiv.o):
+    CODE              Offs=005A6E  Size=00004F  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(umod.o):
+    CODE              Offs=005ABD  Size=000011  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(zerobss.o):
+    CODE              Offs=005ACE  Size=000023  Align=00001  Fill=0000
+/usr/share/cc65/lib/c64.lib(zeropage.o):
+    ZEROPAGE          Offs=000000  Size=00001A  Align=00001  Fill=0000
+
+
+Segment list:
+-------------
+Name                   Start     End    Size  Align
+----------------------------------------------------
+ZEROPAGE              000002  00001B  00001A  00001
+LOADADDR              0007FF  000800  000002  00001
+EXEHDR                000801  00080C  00000C  00001
+STARTUP               00080D  00083F  000033  00001
+CODE                  000840  006330  005AF1  00001
+RODATA                006331  00B918  0055E8  00001
+DATA                  00B919  00B957  00003F  00001
+INIT                  00B958  00B973  00001C  00001
+BSS                   00B974  00C485  000B12  00001
+ONCE                  00B974  00B999  000026  00001
+
+
+Exports list by name:
+---------------------
+BSOUT                     00FFD2 RLA    ST                        000090 RLZ    
+_G                        00B9FB RLA    __BSS_RUN__               00B974 RLA    
+__BSS_SIZE__              000B12 REA    __CONSTRUCTOR_COUNT__     000000 REA    
+__CONSTRUCTOR_TABLE__     00B99A RLA    __DESTRUCTOR_COUNT__      000000 REA    
+__DESTRUCTOR_TABLE__      00B919 RLA    __EXEHDR__                000001 REA    
+__HEADER_LAST__           00080D RLA    __HIMEM__                 00D000 REA    
+__LOADADDR__              000001 REA    __MAIN_SIZE__             00C7F3 REA    
+__MAIN_START__            00080D RLA    __ONCE_RUN__              00B974 RLA    
+__STARTUP__               000001 REA    __bzero                   00602A RLA    
+_core_set_walkmap         002A15 RLA    _doorx                    00BAA3 RLA    
+_doory                    00BAAF RLA    _game_init                002467 RLA    
+_game_tick                0024EF RLA    _glyph_index              005BA0 RLA    
+_main                     002254 RLA    _memcpy                   005FEE RLA    
+_memset                   006032 RLA    _shop_kind                00B8BA RLA    
+_snd_clank                000886 RLA    _snd_jingle               0008AE RLA    
+_snd_new_game             000945 RLA    _snd_sfx                  000840 RLA    
+_strlen                   006261 RLA    addeqysp                  005C62 RLA    
+addysp                    005C72 RLA    addysp1                   005C71 RLA    
+aslax4                    005C98 RLA    asrax1                    005CA9 RLA    
+asrax3                    005CB3 RLA    asrax4                    005CC7 RLA    
+axlong                    005CE0 RLA    bnega                     005CF1 RLA    
+bnegax                    005CED RLA    booleq                    005FC8 RLA    
+boolne                    005FC2 RLA    boolult                   005FE1 RLA    
+callmain                  005CFB RLA    complax                   005D12 RLA    
+decsp2                    005D27 RLA    decsp3                    005D34 RLA    
+decsp4                    005D41 RLA    decsp5                    005D4E RLA    
+decsp6                    005D5B RLA    decsp7                    005D68 RLA    
+decsp8                    005D75 RLA    donelib                   005D1B RLA    
+getlop                    005F40 RLA    incsp1                    005DC5 RLA    
+incsp2                    005DD4 RLA    incsp3                    005DE2 RLA    
+incsp4                    005DE7 RLA    incsp5                    005DEC RLA    
+incsp6                    005DF1 RLA    incsp7                    005DF6 RLA    
+incsp8                    005DFB RLA    initlib                   00B974 RLA    
+laddeq                    005E2D RLA    laddeqa                   005E27 RLA    
+ldaidx                    005E8D RLA    ldeaxysp                  005E9B RLA    
+mul8x16                   0060CE RLA    mul8x16a                  0060D8 RLA    
+mulax3                    006106 RLA    mulax6                    006117 RLA    
+mulax7                    00612D RLA    mulax9                    006146 RLA    
+negax                     006161 RLA    popax                     005DCC RLA    
+popptr1                   00616F RLA    popsargsudiv16            0061C9 RLA    
+ptr1                      00000A RLZ    ptr2                      00000C RLZ    
+ptr3                      00000E RLZ    ptr4                      000010 RLZ    
+push0ax                   005F11 RLA    pusha                     006181 RLA    
+pusha0                    006195 RLA    pushax                    006197 RLA    
+pusheax                   005F17 RLA    pushw0sp                  0061AD RLA    
+pushwysp                  0061AF RLA    regsave                   000006 RLZ    
+shlax2                    005C7F RLA    shlax3                    005C8A RLA    
+shlax4                    005C98 RLA    shrax1                    0061E9 RLA    
+shrax3                    0061F1 RLA    shrax4                    0061FF RLA    
+sp                        000002 RLZ    sreg                      000004 RLZ    
+staspidx                  006210 RLA    stax0sp                   006226 RLA    
+staxspidx                 006231 RLA    staxysp                   006228 RLA    
+steaxysp                  00624E RLA    subeq0sp                  00628C RLA    
+subysp                    0062A1 RLA    tmp1                      000012 RLZ    
+tmp2                      000013 RLZ    tmp3                      000014 RLZ    
+tmp4                      000015 RLZ    tosaddax                  005C46 RLA    
+tosaddeax                 005E06 RLA    tosdiva0                  005D82 RLA    
+tosdivax                  005D84 RLA    tosicmp                   005D99 RLA    
+tosicmp0                  005D97 RLA    toslcmp                   005E52 RLA    
+tosmula0                  0060CC RLA    tosmulax                  006087 RLA    
+tosneeax                  005F08 RLA    tossubax                  006279 RLA    
+tosudiv0ax                005F2F RLA    tosudiva0                 0062AE RLA    
+tosudivax                 0062B0 RLA    tosumod0ax                005FA9 RLA    
+tosumoda0                 0062FD RLA    tosumul0ax                005EAC RLA    
+tosumula0                 0060CC RLA    udiv16                    0062BF RLA    
+udiv32                    005F64 RLA    zerobss                   00630E RLA    
+
+
+
+Exports list by value:
+----------------------
+__CONSTRUCTOR_COUNT__     000000 REA    __DESTRUCTOR_COUNT__      000000 REA    
+__EXEHDR__                000001 REA    __LOADADDR__              000001 REA    
+__STARTUP__               000001 REA    sp                        000002 RLZ    
+sreg                      000004 RLZ    regsave                   000006 RLZ    
+ptr1                      00000A RLZ    ptr2                      00000C RLZ    
+ptr3                      00000E RLZ    ptr4                      000010 RLZ    
+tmp1                      000012 RLZ    tmp2                      000013 RLZ    
+tmp3                      000014 RLZ    tmp4                      000015 RLZ    
+ST                        000090 RLZ    __HEADER_LAST__           00080D RLA    
+__MAIN_START__            00080D RLA    _snd_sfx                  000840 RLA    
+_snd_clank                000886 RLA    _snd_jingle               0008AE RLA    
+_snd_new_game             000945 RLA    __BSS_SIZE__              000B12 REA    
+_main                     002254 RLA    _game_init                002467 RLA    
+_game_tick                0024EF RLA    _core_set_walkmap         002A15 RLA    
+_glyph_index              005BA0 RLA    tosaddax                  005C46 RLA    
+addeqysp                  005C62 RLA    addysp1                   005C71 RLA    
+addysp                    005C72 RLA    shlax2                    005C7F RLA    
+shlax3                    005C8A RLA    aslax4                    005C98 RLA    
+shlax4                    005C98 RLA    asrax1                    005CA9 RLA    
+asrax3                    005CB3 RLA    asrax4                    005CC7 RLA    
+axlong                    005CE0 RLA    bnegax                    005CED RLA    
+bnega                     005CF1 RLA    callmain                  005CFB RLA    
+complax                   005D12 RLA    donelib                   005D1B RLA    
+decsp2                    005D27 RLA    decsp3                    005D34 RLA    
+decsp4                    005D41 RLA    decsp5                    005D4E RLA    
+decsp6                    005D5B RLA    decsp7                    005D68 RLA    
+decsp8                    005D75 RLA    tosdiva0                  005D82 RLA    
+tosdivax                  005D84 RLA    tosicmp0                  005D97 RLA    
+tosicmp                   005D99 RLA    incsp1                    005DC5 RLA    
+popax                     005DCC RLA    incsp2                    005DD4 RLA    
+incsp3                    005DE2 RLA    incsp4                    005DE7 RLA    
+incsp5                    005DEC RLA    incsp6                    005DF1 RLA    
+incsp7                    005DF6 RLA    incsp8                    005DFB RLA    
+tosaddeax                 005E06 RLA    laddeqa                   005E27 RLA    
+laddeq                    005E2D RLA    toslcmp                   005E52 RLA    
+ldaidx                    005E8D RLA    ldeaxysp                  005E9B RLA    
+tosumul0ax                005EAC RLA    tosneeax                  005F08 RLA    
+push0ax                   005F11 RLA    pusheax                   005F17 RLA    
+tosudiv0ax                005F2F RLA    getlop                    005F40 RLA    
+udiv32                    005F64 RLA    tosumod0ax                005FA9 RLA    
+boolne                    005FC2 RLA    booleq                    005FC8 RLA    
+boolult                   005FE1 RLA    _memcpy                   005FEE RLA    
+__bzero                   00602A RLA    _memset                   006032 RLA    
+tosmulax                  006087 RLA    tosmula0                  0060CC RLA    
+tosumula0                 0060CC RLA    mul8x16                   0060CE RLA    
+mul8x16a                  0060D8 RLA    mulax3                    006106 RLA    
+mulax6                    006117 RLA    mulax7                    00612D RLA    
+mulax9                    006146 RLA    negax                     006161 RLA    
+popptr1                   00616F RLA    pusha                     006181 RLA    
+pusha0                    006195 RLA    pushax                    006197 RLA    
+pushw0sp                  0061AD RLA    pushwysp                  0061AF RLA    
+popsargsudiv16            0061C9 RLA    shrax1                    0061E9 RLA    
+shrax3                    0061F1 RLA    shrax4                    0061FF RLA    
+staspidx                  006210 RLA    stax0sp                   006226 RLA    
+staxysp                   006228 RLA    staxspidx                 006231 RLA    
+steaxysp                  00624E RLA    _strlen                   006261 RLA    
+tossubax                  006279 RLA    subeq0sp                  00628C RLA    
+subysp                    0062A1 RLA    tosudiva0                 0062AE RLA    
+tosudivax                 0062B0 RLA    udiv16                    0062BF RLA    
+tosumoda0                 0062FD RLA    zerobss                   00630E RLA    
+_shop_kind                00B8BA RLA    __DESTRUCTOR_TABLE__      00B919 RLA    
+__BSS_RUN__               00B974 RLA    __ONCE_RUN__              00B974 RLA    
+initlib                   00B974 RLA    __CONSTRUCTOR_TABLE__     00B99A RLA    
+_G                        00B9FB RLA    _doorx                    00BAA3 RLA    
+_doory                    00BAAF RLA    __MAIN_SIZE__             00C7F3 REA    
+__HIMEM__                 00D000 REA    BSOUT                     00FFD2 RLA    
+
+
+
+Imports list:
+-------------
+BSOUT (kernal.o):
+    crt0.o                    c64/crt0.s(10)
+ST (status.o):
+    crt0.o                    c64/crt0.s(13)
+_G (core.o):
+    plat_c64.o                src/plat_c64.s(18)
+__BSS_RUN__ ([linker generated]):
+    zerobss.o                 common/zerobss.s(8)
+__BSS_SIZE__ ([linker generated]):
+    zerobss.o                 common/zerobss.s(8)
+__CONSTRUCTOR_COUNT__ ([linker generated]):
+    condes.o                  runtime/condes.s(18)
+__CONSTRUCTOR_TABLE__ ([linker generated]):
+    condes.o                  runtime/condes.s(18)
+__DESTRUCTOR_COUNT__ ([linker generated]):
+    condes.o                  runtime/condes.s(19)
+__DESTRUCTOR_TABLE__ ([linker generated]):
+    condes.o                  runtime/condes.s(19)
+__EXEHDR__ (exehdr.o):
+    [linker generated]        /usr/share/cc65/cfg/c64.cfg(6)
+__HEADER_LAST__ ([linker generated]):
+    [linker generated]        /usr/share/cc65/cfg/c64.cfg(14)
+    [linker generated]        /usr/share/cc65/cfg/c64.cfg(14)
+__HIMEM__ ([linker generated]):
+    [linker generated]        /usr/share/cc65/cfg/c64.cfg(15)
+    [linker generated]        /usr/share/cc65/cfg/c64.cfg(14)
+__LOADADDR__ (loadaddr.o):
+    [linker generated]        /usr/share/cc65/cfg/c64.cfg(5)
+__MAIN_SIZE__ ([linker generated]):
+    crt0.o                    c64/crt0.s(11)
+__MAIN_START__ ([linker generated]):
+    crt0.o                    c64/crt0.s(11)
+__ONCE_RUN__ ([linker generated]):
+    [linker generated]        /usr/share/cc65/cfg/c64.cfg(15)
+    [linker generated]        /usr/share/cc65/cfg/c64.cfg(15)
+__STARTUP__ (crt0.o):
+    plat_c64.o                src/plat_c64.s(13)
+__bzero (memset.o):
+    plat_c64.o                src/plat_c64.s(24153)
+_core_set_walkmap (core.o):
+    plat_c64.o                src/plat_c64.s(24)
+_doorx (core.o):
+    plat_c64.o                src/plat_c64.s(19)
+_doory (core.o):
+    plat_c64.o                src/plat_c64.s(20)
+_game_init (core.o):
+    plat_c64.o                src/plat_c64.s(22)
+_game_tick (core.o):
+    plat_c64.o                src/plat_c64.s(23)
+_glyph_index (mcfont.o):
+    plat_c64.o                src/plat_c64.s(25)
+_main (plat_c64.o):
+    callmain.o                runtime/callmain.s(11)
+_memcpy (memcpy.o):
+    plat_c64.o                src/plat_c64.s(16)
+_memset (memset.o):
+    plat_c64.o                src/plat_c64.s(17)
+_shop_kind (core.o):
+    plat_c64.o                src/plat_c64.s(21)
+_snd_clank (plat_c64.o):
+    core.o                    src/core.s(29)
+_snd_jingle (plat_c64.o):
+    core.o                    src/core.s(30)
+_snd_new_game (plat_c64.o):
+    core.o                    src/core.s(31)
+_snd_sfx (plat_c64.o):
+    core.o                    src/core.s(28)
+_strlen (strlen.o):
+    plat_c64.o                src/plat_c64.s(15)
+addeqysp (addeqsp.o):
+    plat_c64.o                src/plat_c64.s(24153)
+addysp (addysp.o):
+    incsp8.o                  runtime/incsp8.s(8)
+    incsp7.o                  runtime/incsp7.s(8)
+    incsp6.o                  runtime/incsp6.s(8)
+    incsp5.o                  runtime/incsp5.s(8)
+    incsp4.o                  runtime/incsp4.s(8)
+    incsp3.o                  runtime/incsp3.s(8)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+addysp1 (addysp.o):
+    sub.o                     runtime/sub.s(8)
+    ludiv.o                   runtime/ludiv.s(9)
+    lmul.o                    runtime/lmul.s(9)
+    ladd.o                    runtime/ladd.s(8)
+aslax4 (aslax4.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+asrax1 (asrax1.o):
+    core.o                    src/core.s(8709)
+asrax3 (asrax3.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+asrax4 (asrax4.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+axlong (axlong.o):
+    core.o                    src/core.s(8709)
+bnega (bneg.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+bnegax (bneg.o):
+    core.o                    src/core.s(8709)
+booleq (makebool.o):
+    plat_c64.o                src/plat_c64.s(24153)
+boolne (makebool.o):
+    lne.o                     runtime/lne.s(8)
+    core.o                    src/core.s(8709)
+boolult (makebool.o):
+    plat_c64.o                src/plat_c64.s(24153)
+callmain (callmain.o):
+    crt0.o                    c64/crt0.s(9)
+complax (compl.o):
+    plat_c64.o                src/plat_c64.s(24153)
+decsp2 (decsp2.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+decsp3 (decsp3.o):
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+decsp4 (decsp4.o):
+    lpush.o                   runtime/lpush.s(12)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+decsp5 (decsp5.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+decsp6 (decsp6.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+decsp7 (decsp7.o):
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+decsp8 (decsp8.o):
+    core.o                    src/core.s(8709)
+donelib (condes.o):
+    crt0.o                    c64/crt0.s(8)
+getlop (ludiv.o):
+    lumod.o                   runtime/lumod.s(9)
+incsp1 (incsp1.o):
+    mcfont.o                  src/mcfont.s(105)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+incsp2 (incsp2.o):
+    staxspi.o                 runtime/staxspi.s(9)
+    staspidx.o                runtime/staspidx.s(8)
+    popptr1.o                 runtime/popptr1.s(8)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+incsp3 (incsp3.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+incsp4 (incsp4.o):
+    lcmp.o                    runtime/lcmp.s(9)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+incsp5 (incsp5.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+incsp6 (incsp6.o):
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+incsp7 (incsp7.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+incsp8 (incsp8.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+initlib (condes.o):
+    crt0.o                    c64/crt0.s(8)
+laddeq (laddeq.o):
+    core.o                    src/core.s(8709)
+laddeqa (laddeq.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+ldaidx (ldai.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+ldeaxysp (ldeaxysp.o):
+    plat_c64.o                src/plat_c64.s(24153)
+mul8x16 (mul8.o):
+    mul.o                     runtime/mul.s(8)
+mul8x16a (mul8.o):
+    mul.o                     runtime/mul.s(8)
+mulax3 (mulax3.o):
+    core.o                    src/core.s(8709)
+mulax6 (mulax6.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+mulax7 (mulax7.o):
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+mulax9 (mulax9.o):
+    core.o                    src/core.s(8709)
+negax (negabs.o):
+    shelp.o                   runtime/shelp.s(11)
+    div.o                     runtime/div.s(11)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+popax (incsp2.o):
+    shelp.o                   runtime/shelp.s(11)
+    memset.o                  common/memset.s(19)
+    memcpy.o                  common/memcpy.s(14)
+popptr1 (popptr1.o):
+    umod.o                    runtime/umod.s(8)
+    udiv.o                    runtime/udiv.s(9)
+    mul8.o                    runtime/mul8.s(9)
+    mul.o                     runtime/mul.s(9)
+    memcpy.o                  common/memcpy.s(14)
+popsargsudiv16 (shelp.o):
+    div.o                     runtime/div.s(11)
+ptr1 (zeropage.o):
+    lcmp.o                    runtime/lcmp.s(10)
+    zerobss.o                 common/zerobss.s(9)
+    udiv.o                    runtime/udiv.s(10)
+    staxspi.o                 runtime/staxspi.s(10)
+    staspidx.o                runtime/staspidx.s(9)
+    shelp.o                   runtime/shelp.s(12)
+    popptr1.o                 runtime/popptr1.s(9)
+    mulax9.o                  runtime/mulax9.s(10)
+    mulax7.o                  runtime/mulax7.s(10)
+    mulax6.o                  runtime/mulax6.s(9)
+    mulax3.o                  runtime/mulax3.s(9)
+    mul8.o                    runtime/mul8.s(10)
+    mul.o                     runtime/mul.s(10)
+    memset.o                  common/memset.s(20)
+    memcpy.o                  common/memcpy.s(15)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmul.o                    runtime/lmul.s(10)
+    ldai.o                    runtime/ldai.s(8)
+    laddeq.o                  runtime/laddeq.s(12)
+    div.o                     runtime/div.s(12)
+    core.o                    src/core.s(11)
+    plat_c64.o                src/plat_c64.s(11)
+ptr2 (zeropage.o):
+    strlen.o                  common/strlen.s(12)
+    memset.o                  common/memset.s(20)
+    memcpy.o                  common/memcpy.s(15)
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+ptr3 (zeropage.o):
+    memset.o                  common/memset.s(20)
+    memcpy.o                  common/memcpy.s(15)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmul.o                    runtime/lmul.s(10)
+ptr4 (zeropage.o):
+    umod.o                    runtime/umod.s(9)
+    udiv.o                    runtime/udiv.s(10)
+    shelp.o                   runtime/shelp.s(12)
+    mul8.o                    runtime/mul8.s(10)
+    mul.o                     runtime/mul.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmul.o                    runtime/lmul.s(10)
+push0ax (lpush.o):
+    core.o                    src/core.s(8709)
+pusha (pusha.o):
+    mcfont.o                  src/mcfont.s(105)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+pusha0 (pushax.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+pushax (pushax.o):
+    callmain.o                runtime/callmain.s(11)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+pusheax (lpush.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+pushw0sp (pushwsp.o):
+    core.o                    src/core.s(8709)
+pushwysp (pushwsp.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+regsave (zeropage.o):
+    plat_c64.o                src/plat_c64.s(10)
+shlax2 (aslax2.o):
+    plat_c64.o                src/plat_c64.s(24153)
+shlax3 (aslax3.o):
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+shlax4 (aslax4.o):
+    plat_c64.o                src/plat_c64.s(24153)
+shrax1 (shrax1.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+shrax3 (shrax3.o):
+    core.o                    src/core.s(8709)
+shrax4 (shrax4.o):
+    core.o                    src/core.s(8709)
+sp (zeropage.o):
+    lcmp.o                    runtime/lcmp.s(10)
+    subysp.o                  runtime/subysp.s(9)
+    subeqsp.o                 runtime/subeqsp.s(8)
+    sub.o                     runtime/sub.s(9)
+    steaxsp.o                 runtime/steaxsp.s(8)
+    staxspi.o                 runtime/staxspi.s(10)
+    staxsp.o                  runtime/staxsp.s(8)
+    staspidx.o                runtime/staspidx.s(9)
+    pushwsp.o                 runtime/pushwsp.s(8)
+    pushax.o                  runtime/pushax.s(8)
+    pusha.o                   runtime/pusha.s(8)
+    popptr1.o                 runtime/popptr1.s(9)
+    memset.o                  common/memset.s(20)
+    memcpy.o                  common/memcpy.s(15)
+    ludiv.o                   runtime/ludiv.s(10)
+    lpush.o                   runtime/lpush.s(13)
+    lmul.o                    runtime/lmul.s(10)
+    ldeaxysp.o                runtime/ldeaxysp.s(12)
+    ladd.o                    runtime/ladd.s(9)
+    incsp2.o                  runtime/incsp2.s(8)
+    incsp1.o                  runtime/incsp1.s(8)
+    icmp.o                    runtime/icmp.s(9)
+    decsp8.o                  runtime/decsp8.s(8)
+    decsp7.o                  runtime/decsp7.s(8)
+    decsp6.o                  runtime/decsp6.s(8)
+    decsp5.o                  runtime/decsp5.s(8)
+    decsp4.o                  runtime/decsp4.s(8)
+    decsp3.o                  runtime/decsp3.s(8)
+    decsp2.o                  runtime/decsp2.s(8)
+    crt0.o                    /home/henri/.cache/yay/cc65/src/cc65-2.19/asminc/zeropage.inc(11)
+    addysp.o                  runtime/addysp.s(8)
+    addeqsp.o                 runtime/addeqsp.s(8)
+    add.o                     runtime/add.s(12)
+    mcfont.o                  src/mcfont.s(10)
+    core.o                    src/core.s(10)
+    plat_c64.o                src/plat_c64.s(10)
+sreg (zeropage.o):
+    lcmp.o                    runtime/lcmp.s(10)
+    umod.o                    runtime/umod.s(9)
+    udiv.o                    runtime/udiv.s(10)
+    steaxsp.o                 runtime/steaxsp.s(8)
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lpush.o                   runtime/lpush.s(13)
+    lmul.o                    runtime/lmul.s(10)
+    ldeaxysp.o                runtime/ldeaxysp.s(12)
+    laddeq.o                  runtime/laddeq.s(12)
+    ladd.o                    runtime/ladd.s(9)
+    icmp.o                    runtime/icmp.s(9)
+    axlong.o                  runtime/axlong.s(9)
+    core.o                    src/core.s(10)
+    plat_c64.o                src/plat_c64.s(10)
+staspidx (staspidx.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+stax0sp (staxsp.o):
+    core.o                    src/core.s(8709)
+staxspidx (staxspi.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+staxysp (staxsp.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+steaxysp (steaxsp.o):
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+subeq0sp (subeqsp.o):
+    plat_c64.o                src/plat_c64.s(24153)
+subysp (subysp.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+tmp1 (zeropage.o):
+    staxspi.o                 runtime/staxspi.s(10)
+    staspidx.o                runtime/staspidx.s(9)
+    shrax4.o                  runtime/shrax4.s(8)
+    shrax3.o                  runtime/shrax3.s(8)
+    shrax1.o                  runtime/shrax1.s(8)
+    shelp.o                   runtime/shelp.s(12)
+    mul.o                     runtime/mul.s(10)
+    ladd.o                    runtime/ladd.s(9)
+    div.o                     runtime/div.s(12)
+    asrax4.o                  runtime/asrax4.s(9)
+    asrax3.o                  runtime/asrax3.s(9)
+    asrax1.o                  runtime/asrax1.s(8)
+    aslax4.o                  runtime/aslax4.s(8)
+    aslax3.o                  runtime/aslax3.s(8)
+    aslax2.o                  runtime/aslax2.s(8)
+    add.o                     runtime/add.s(12)
+    core.o                    src/core.s(11)
+    plat_c64.o                src/plat_c64.s(11)
+tmp2 (zeropage.o):
+    shelp.o                   runtime/shelp.s(12)
+    lmul.o                    runtime/lmul.s(10)
+    div.o                     runtime/div.s(12)
+tmp3 (zeropage.o):
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmul.o                    runtime/lmul.s(10)
+tmp4 (zeropage.o):
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmul.o                    runtime/lmul.s(10)
+tosaddax (add.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+tosaddeax (ladd.o):
+    core.o                    src/core.s(8709)
+tosdiva0 (div.o):
+    core.o                    src/core.s(8709)
+tosdivax (div.o):
+    core.o                    src/core.s(8709)
+tosicmp (icmp.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+tosicmp0 (icmp.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+toslcmp (lcmp.o):
+    lne.o                     runtime/lne.s(8)
+tosmula0 (mul8.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+tosmulax (mul.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+tosneeax (lne.o):
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+tossubax (sub.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+tosudiv0ax (ludiv.o):
+    plat_c64.o                src/plat_c64.s(24153)
+tosudiva0 (udiv.o):
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+tosudivax (udiv.o):
+    plat_c64.o                src/plat_c64.s(24153)
+tosumod0ax (lumod.o):
+    plat_c64.o                src/plat_c64.s(24153)
+tosumoda0 (umod.o):
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+tosumul0ax (lmul.o):
+    core.o                    src/core.s(8709)
+tosumula0 (mul8.o):
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    core.o                    src/core.s(8709)
+    plat_c64.o                src/plat_c64.s(24153)
+    plat_c64.o                src/plat_c64.s(24153)
+udiv16 (udiv.o):
+    umod.o                    runtime/umod.s(8)
+    shelp.o                   runtime/shelp.s(11)
+udiv32 (ludiv.o):
+    lumod.o                   runtime/lumod.s(9)
+zerobss (zerobss.o):
+    crt0.o                    c64/crt0.s(9)
+
