@@ -149,3 +149,15 @@ To reset your saved best score, clear the site's `localStorage` entry named `sho
 6. Rendering and HUD
 7. Touch controls and the main loop
 
+
+## Ports to other platforms
+
+The browser game above is the reference. Ports live in their own directories; each has its own README and Makefile and is built from inside its directory.
+
+| Directory | What | Toolchain |
+|---|---|---|
+| [`native/`](native/) | Desktop C11 port with the original maths, vector renderer and synth, checked against the real `index.html` code (traces, frames, audio) | gcc/clang, raylib + PlutoVG (vendored); `make`, `make test` |
+| [`chop64/`](chop64/) | Commodore 64 edition: tuned-down integer game core, multicolour sprites, SID music, loading screen | cc65, VICE (`make`, `make d64`, `make test`) |
+| [`nes/`](nes/) | NES edition (NROM-256) using the C64 integer core in `chop64/src/core.c` | cc65, fceux + xvfb for the tests (`make`, `make test`) |
+
+`releases/` has ready-built images (`chopping-mall.d64`, `.prg`, `.nes`). The NES ROM auto-detects NTSC/PAL. The ports were verified in emulators only, not on real hardware.

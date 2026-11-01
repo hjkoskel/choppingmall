@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generates src/jingle_gen.h: the win and lose stingers for the 3 SID voices, transcribed from jingleWin()/jingleLose() in the JavaScript game
-(reference/index.html). usage: python3 tools/gen_jingles.py > src/jingle_gen.h
+(../index.html). usage: python3 tools/gen_jingles.py > src/jingle_gen.h
 Each voice is a stream of 3-byte events: wait (frames, 0-255), note (MIDI; 0 = gate off, 254 = keep going, 255 = end of stream),
 instrument (bit 7 = only change the pitch, do not retrigger). The player is snd_frame()/jingle_frame() in plat_c64.c."""
 import re

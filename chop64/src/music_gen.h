@@ -3,6 +3,7 @@
 #define MUSIC_GEN_H
 #include "types.h"
 /* SID frequency register value (PAL) for MIDI notes 0..95 */
+#ifndef NES
 static const u16 SID_FREQ[96] = {
   139u, 147u, 156u, 166u, 175u, 186u, 197u, 209u, 221u, 234u, 248u, 263u,
   278u, 295u, 313u, 331u, 351u, 372u, 394u, 417u, 442u, 468u, 496u, 526u,
@@ -13,6 +14,7 @@ static const u16 SID_FREQ[96] = {
   8910u, 9440u, 10001u, 10596u, 11226u, 11894u, 12601u, 13350u, 14144u, 14985u, 15876u, 16820u,
   17820u, 18880u, 20003u, 21192u, 22452u, 23787u, 25202u, 26700u, 28288u, 29970u, 31752u, 33640u,
 };
+#endif
 /* music: 96 eighth-note slots (12 bars x 8): MIDI note or 0; drums bit0 kick, 1 snare, 2 hat, 3 crash */
 static const u8 MUS_LEAD[96] = {
   0, 0, 0, 0, 0, 57, 57, 57, 0, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 57,

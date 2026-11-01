@@ -6,14 +6,27 @@
 
 Game G;
 i16 obx[NOB], oby[NOB], doorx[6], doory[6];
+#ifdef NES /* 2 KB of RAM: the coverage grid is dropped (valid() just runs the exact obstacle test, 6 boxes) and the constant tables live in ROM */
+#include "nes_tables.h"
+#ifdef NES_NO_WALKMAP /* ROM saver: the exact (slower) valid() everywhere */
+static const u8 *walkmap = 0;
+#else
+static const u8 *walkmap = NES_WALK;
+#endif
+#define ROW26(y) ((u16)(((u16)(y) << 5) - ((u16)(y) << 2) - (u16)(y))) /* y * 27 = WALK_W / 8 */
+#else
 static u8 obg[1000];     /* 1 where an 8x8 cell is within reach of an obstacle: valid() only runs the exact test there */
 static u16 rowoff[25];
 static const u8 *walkmap;   /* optional 1 bit per pixel: valid(r = 5) precomputed at build time (see assets.c) */
 static u16 rowoff26[200];
+#define ROW26(y) rowoff26[y]
+#endif
 static const u8 BITM[8] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
 const u8 shop_kind[6] = {1, 2, 3, 0, 1, 0}; /* SHELLS GAS FIRST AID AMMO SHELLS AMMO */
 
+#ifndef NES
 static i16 clx[32], cly[32]; /* centre-line waypoints per direction, px offsets from the centre */
+#endif
 static const i8 NX[6] = {111, 0, -111, -111, 0, 111}; /* hexagon side normals (30 + 60k degrees), Q7 */
 static const i8 NY[6] = {64, 127, 64, -64, -127, -64};
 static const u8 DIRTAB[16] = {255, 24, 8, 255, 16, 20, 12, 255, 0, 28, 4, 255, 255, 255, 255, 255}; /* up,down,left,right bits */
@@ -24,9 +37,15 @@ static const i8 OFFA[7] = {0, 3, -3, 5, -5, 8, -8};
 static const i8 OFFB[7] = {0, -3, 3, -5, 5, -8, 8};
 static const u8 AMMO_MAX[3] = {15, 8, 6};
 /* per-direction velocity tables: a signed 16x8 multiply costs ~600 cycles on a 6502, a lookup ~20 */
+#ifndef NES
 static i16 pvx[32], pvy[32];                  /* player, 17 / frame */
 static i16 b97x[32], b97y[32], b86x[32], b86y[32]; /* pistol bullet, shotgun pellet */
+#endif
+#ifdef NES
+static const i8 *rvx, *rvy, *rsx, *rsy, *rbx, *rby; /* robot: normal, slowed, reverse; point into the per-level ROM tables */
+#else
 static i16 rvx[32], rvy[32], rsx[32], rsy[32], rbx[32], rby[32]; /* robot: normal, slowed, reverse; set per level */
+#endif
 static u8 rsp_n, rsp_s, rrev_step;
 static const u8 RESTOCK[3] = {6, 2, 2}; /* given per shop visit (hard mode; the original game gave 18 / 6 / 2) */
 
@@ -67,11 +86,15 @@ u8 valid(i16 x16, i16 y16, u8 r) {
   if (r == 5 && walkmap) { /* exactly the same answer as the code below, from the precomputed bitmap */
     if (y < 0 || y > 199 || x < WALK_X0 || x >= WALK_X0 + WALK_W) return 0;
     xi = (u16)(x - WALK_X0);
-    return (u8)((walkmap[rowoff26[y] + (xi >> 3)] & BITM[xi & 7]) != 0);
+    return (u8)((walkmap[ROW26(y) + (xi >> 3)] & BITM[xi & 7]) != 0);
   }
   m = mdot(x - CX, y - CY);
   if (m > (u16)(AO - r) || m < (u16)(AI + r)) return 0;
+#ifdef NES
+  if (!(NES_OBG[(u8)(((u8)(y >> 3) << 2) + (u8)(y >> 3) + (u8)(x >> 6))] & BITM[(x >> 3) & 7])) return 1;
+#else
   if (!obg[rowoff[y >> 3] + (x >> 3)]) return 1;
+#endif
   lim = (u8)(OBH + r);
   for (i = 0; i < NOB; i++) /* |x - ox| < lim as a single unsigned compare */
     if ((u16)(x - obx[i] + lim) < (u16)(2 * lim) && (u16)(y - oby[i] + lim) < (u16)(2 * lim)) return 0;
@@ -155,7 +178,9 @@ u8 nav_target(i16 sx, i16 sy, i16 tx, i16 ty, i8 *dir, i16 *wx, i16 *wy) {
 
 void core_set_walkmap(const u8 *map) { walkmap = map; }
 
+#ifndef NES
 static void memset_obg(void) { u16 i; for (i = 0; i < 1000; i++) obg[i] = 0; }
+#endif
 
 static void world_init(void) {
   u8 k, i;
@@ -168,6 +193,7 @@ static void world_init(void) {
     obx[k] = CX + ((NX[k] * d - NY[k] * t) >> 7);
     oby[k] = CY + ((NY[k] * d + NX[k] * t) >> 7);
   }
+#ifndef NES
   for (i = 0; i < 25; i++) rowoff[i] = (u16)(i * 40);
   for (cx = 0; cx < 200; cx++) rowoff26[cx] = (u16)(cx * (WALK_W / 8));
   memset_obg();
@@ -185,6 +211,7 @@ static void world_init(void) {
     clx[i] = (i16)((ux * 72) / (i16)m); /* centre line: apothem 72 = (AO + AI) / 2 */
     cly[i] = (i16)((uy * 72) / (i16)m);
   }
+#endif
 }
 
 /* ------------------------------------------------------------------ level flow */
@@ -207,6 +234,9 @@ static void spawn(void) { /* js: spawn */
 static void start_level(void) { /* js: startLevel */
   u8 i, l = (u8)(G.level - 1);
   rsp_n = RSPD[l]; rsp_s = (u8)((rsp_n * 9) >> 4); rrev_step = (u8)((rsp_n * 13) >> 4);
+#ifdef NES
+  rvx = RTAB[l * 6]; rvy = RTAB[l * 6 + 1]; rsx = RTAB[l * 6 + 2]; rsy = RTAB[l * 6 + 3]; rbx = RTAB[l * 6 + 4]; rby = RTAB[l * 6 + 5];
+#else
   for (i = 0; i < 32; i++) {
     /* NB (i16) casts: cc65 promotes an unsigned char operand to UNSIGNED int, which would turn the product and the
      * arithmetic '>> 7' unsigned (a -3 became 509 on the C64). Always widen to i16 before multiplying by a signed table. */
@@ -214,6 +244,7 @@ static void start_level(void) { /* js: startLevel */
     rsx[i] = (i16)(((i16)rsp_s * COS32[i]) >> 7); rsy[i] = (i16)(((i16)rsp_s * SIN32[i]) >> 7);
     rbx[i] = (i16)(((i16)rrev_step * COS32[i]) >> 7); rby[i] = (i16)(((i16)rrev_step * SIN32[i]) >> 7);
   }
+#endif
   if (G.w >= G.level) G.w = 0; /* a weapon the level does not offer */
   G.php = 1000;
 #ifdef DEBUG_HP

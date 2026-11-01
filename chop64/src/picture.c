@@ -118,6 +118,9 @@ static void put_cell(Assets *A, u8 cx, u8 cy, u8 gi, u8 color) {
   A->col[i] = color;
 }
 static void put_text(Assets *A, u8 cx, u8 cy, const char *s, u8 color) {
+#ifdef NO_TEXT /* NES build tool: the picture without any text cells (the NES draws its labels itself) */
+  (void)A; (void)cx; (void)cy; (void)s; (void)color; return;
+#endif
   while (*s) put_cell(A, cx++, cy, glyph_index(*s++), color);
 }
 
@@ -162,7 +165,9 @@ void picture_build(Assets *A) {
   for (k = 0; k < 6; k++) {
     int len = (int)strlen(SHOPNAME[k]), px = CX + ((SNX[k] * 36) >> 7), py = CY + ((SNY[k] * 36) >> 7);
     put_text(A, (u8)((px - len * 4) / 8), (u8)((py - 4) / 8), SHOPNAME[k], SHOPCOL[shop_kind[k]]);
+#ifndef NO_TEXT /* the NES draws the doors as sprites */
     put_cell(A, (u8)(doorx[k] >> 3), (u8)(doory[k] >> 3), GL_DOLLAR, SHOPCOL[shop_kind[k]]);
+#endif
   }
   put_text(A, 16, 11, "CHOPPING", 10);
   put_text(A, 18, 12, "MALL", 3);

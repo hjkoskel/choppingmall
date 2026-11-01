@@ -1,0 +1,954 @@
+Modules list:
+-------------
+crt0.o:
+    RODATA            Offs=000000  Size=000360  Align=00001  Fill=0000
+    BSS               Offs=000000  Size=000038  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000000  Size=000005  Align=00001  Fill=0000
+    HEADER            Offs=000000  Size=000008  Align=00001  Fill=0000
+    OAM               Offs=000000  Size=000100  Align=00001  Fill=0000
+    STARTUP           Offs=000000  Size=0000AC  Align=00001  Fill=0000
+    VECTORS           Offs=000000  Size=000006  Align=00001  Fill=0000
+    CHARS             Offs=000000  Size=002000  Align=00001  Fill=0000
+plat_nes.o:
+    CODE              Offs=000000  Size=0020EE  Align=00001  Fill=0000
+    RODATA            Offs=000360  Size=000833  Align=00001  Fill=0000
+    BSS               Offs=000038  Size=00011C  Align=00001  Fill=0000
+    DATA              Offs=000000  Size=000005  Align=00001  Fill=0000
+core.o:
+    CODE              Offs=0020EE  Size=003269  Align=00001  Fill=0000
+    RODATA            Offs=000B93  Size=000983  Align=00001  Fill=0000
+    BSS               Offs=000154  Size=000162  Align=00001  Fill=0000
+    DATA              Offs=000005  Size=000002  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(add.o):
+    CODE              Offs=005357  Size=00001C  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(addysp.o):
+    CODE              Offs=005373  Size=00000E  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(aslax2.o):
+    CODE              Offs=005381  Size=00000B  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(aslax3.o):
+    CODE              Offs=00538C  Size=00000E  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(aslax4.o):
+    CODE              Offs=00539A  Size=000011  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(asrax1.o):
+    CODE              Offs=0053AB  Size=00000A  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(asrax2.o):
+    CODE              Offs=0053B5  Size=00000F  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(asrax3.o):
+    CODE              Offs=0053C4  Size=000014  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(asrax4.o):
+    CODE              Offs=0053D8  Size=000019  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(axlong.o):
+    CODE              Offs=0053F1  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(bneg.o):
+    CODE              Offs=0053FE  Size=00000E  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(copydata.o):
+    CODE              Offs=00540C  Size=00002D  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(decsp2.o):
+    CODE              Offs=005439  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(decsp3.o):
+    CODE              Offs=005446  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(decsp4.o):
+    CODE              Offs=005453  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(decsp5.o):
+    CODE              Offs=005460  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(decsp6.o):
+    CODE              Offs=00546D  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(decsp7.o):
+    CODE              Offs=00547A  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(decsp8.o):
+    CODE              Offs=005487  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(div.o):
+    CODE              Offs=005494  Size=000015  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(icmp.o):
+    CODE              Offs=0054A9  Size=00002E  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(incsp1.o):
+    CODE              Offs=0054D7  Size=000007  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(incsp2.o):
+    CODE              Offs=0054DE  Size=000016  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(incsp3.o):
+    CODE              Offs=0054F4  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(incsp4.o):
+    CODE              Offs=0054F9  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(incsp5.o):
+    CODE              Offs=0054FE  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(incsp6.o):
+    CODE              Offs=005503  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(incsp7.o):
+    CODE              Offs=005508  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(incsp8.o):
+    CODE              Offs=00550D  Size=000005  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(ladd.o):
+    CODE              Offs=005512  Size=000025  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(laddeq.o):
+    CODE              Offs=005537  Size=00002D  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(lcmp.o):
+    CODE              Offs=005564  Size=00003B  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(ldai.o):
+    CODE              Offs=00559F  Size=00000C  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(ldeaxysp.o):
+    CODE              Offs=0055AB  Size=000013  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(ldec.o):
+    CODE              Offs=0055BE  Size=000015  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(linc.o):
+    CODE              Offs=0055D3  Size=000011  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(lmul.o):
+    CODE              Offs=0055E4  Size=00005C  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(lne.o):
+    CODE              Offs=005640  Size=000006  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(lpush.o):
+    CODE              Offs=005646  Size=000021  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(ltest.o):
+    CODE              Offs=005667  Size=00000F  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(ludiv.o):
+    CODE              Offs=005676  Size=00007A  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(lumod.o):
+    CODE              Offs=0056F0  Size=000019  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(makebool.o):
+    CODE              Offs=005709  Size=00002C  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(mul.o):
+    CODE              Offs=005735  Size=000045  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(mul8.o):
+    CODE              Offs=00577A  Size=00003A  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(mulax3.o):
+    CODE              Offs=0057B4  Size=000011  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(mulax6.o):
+    CODE              Offs=0057C5  Size=000016  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(mulax9.o):
+    CODE              Offs=0057DB  Size=000017  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(negabs.o):
+    CODE              Offs=0057F2  Size=000012  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(or.o):
+    CODE              Offs=005804  Size=000012  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(popptr1.o):
+    CODE              Offs=005816  Size=00000E  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(pusha.o):
+    CODE              Offs=005824  Size=000016  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(pushax.o):
+    CODE              Offs=00583A  Size=00001A  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(pushwsp.o):
+    CODE              Offs=005854  Size=00001C  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(shelp.o):
+    CODE              Offs=005870  Size=000020  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(shrax1.o):
+    CODE              Offs=005890  Size=000008  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(shrax3.o):
+    CODE              Offs=005898  Size=00000E  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(shrax4.o):
+    CODE              Offs=0058A6  Size=000011  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(staspidx.o):
+    CODE              Offs=0058B7  Size=000016  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(staxsp.o):
+    CODE              Offs=0058CD  Size=00000B  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(staxspi.o):
+    CODE              Offs=0058D8  Size=00001B  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(steaxsp.o):
+    CODE              Offs=0058F3  Size=000015  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(strlen.o):
+    CODE              Offs=005908  Size=000016  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(sub.o):
+    CODE              Offs=00591E  Size=000015  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(subysp.o):
+    CODE              Offs=005933  Size=00000D  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(udiv.o):
+    CODE              Offs=005940  Size=00004F  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(umod.o):
+    CODE              Offs=00598F  Size=000011  Align=00001  Fill=0000
+/usr/share/cc65/lib/none.lib(zeropage.o):
+    ZEROPAGE          Offs=000005  Size=00001A  Align=00001  Fill=0000
+
+
+Segment list:
+-------------
+Name                   Start     End    Size  Align
+----------------------------------------------------
+CHARS                 000000  001FFF  002000  00001
+HEADER                000000  000007  000008  00001
+ZEROPAGE              000002  000020  00001F  00001
+OAM                   000200  0002FF  000100  00001
+BSS                   000300  0005B5  0002B6  00001
+DATA                  0005B6  0005BC  000007  00001
+STARTUP               008000  0080AB  0000AC  00001
+CODE                  0080AC  00DA4B  0059A0  00001
+RODATA                00DA4C  00EF61  001516  00001
+VECTORS               00FFFA  00FFFF  000006  00001
+
+
+Exports list by name:
+---------------------
+_G                        000454 RLA    __DATA_LOAD__             00EF62 RLA    
+__DATA_RUN__              0005B6 RLA    __DATA_SIZE__             000007 REA    
+__STACKSIZE__             000100 REA    __STACKSTART__            000700 REA    
+__STARTUP__               000001 REA    _attr_rom                 00DD6C RLA    
+_doorx                    0004FC RLA    _doory                    000508 RLA    
+_game_init                00A19A RLA    _game_tick                00A222 RLA    
+_main                     0099C3 RLA    _nmi_count                000003 RLZ    
+_nmi_ready                000002 RLZ    _nt_rom                   00DA4C RLA    
+_oam                      000200 RLA    _ppuctrl                  000005 RLZ    
+_ppumask                  000004 RLZ    _shop_kind                00EF03 RLA    
+_snd_clank                0080F9 RLA    _snd_jingle               008121 RLA    
+_snd_new_game             0081B8 RLA    _snd_sfx                  0080AC RLA    
+_strlen                   00D9B4 RLA    _vbuf                     000300 RLA    
+_vlen                     000006 RLZ    addysp                    00D420 RLA    
+addysp1                   00D41F RLA    aslax2                    00D42D RLA    
+aslax3                    00D438 RLA    aslax4                    00D446 RLA    
+asrax1                    00D457 RLA    asrax2                    00D461 RLA    
+asrax3                    00D470 RLA    asrax4                    00D484 RLA    
+axlong                    00D49D RLA    bnega                     00D4AE RLA    
+bnegax                    00D4AA RLA    booleq                    00D7BB RLA    
+boolne                    00D7B5 RLA    boolult                   00D7D4 RLA    
+copydata                  00D4B8 RLA    deceaxy                   00D66A RLA    
+decsp2                    00D4E5 RLA    decsp3                    00D4F2 RLA    
+decsp4                    00D4FF RLA    decsp5                    00D50C RLA    
+decsp6                    00D519 RLA    decsp7                    00D526 RLA    
+decsp8                    00D533 RLA    getlop                    00D733 RLA    
+inceaxy                   00D67F RLA    incsp1                    00D583 RLA    
+incsp2                    00D592 RLA    incsp3                    00D5A0 RLA    
+incsp4                    00D5A5 RLA    incsp5                    00D5AA RLA    
+incsp6                    00D5AF RLA    incsp7                    00D5B4 RLA    
+incsp8                    00D5B9 RLA    laddeq                    00D5EB RLA    
+laddeqa                   00D5E5 RLA    ldaidx                    00D64B RLA    
+ldeaxysp                  00D659 RLA    mul8x16                   00D828 RLA    
+mul8x16a                  00D832 RLA    mulax3                    00D860 RLA    
+mulax6                    00D871 RLA    mulax9                    00D887 RLA    
+negax                     00D8A2 RLA    popax                     00D58A RLA    
+popptr1                   00D8C2 RLA    popsargsudiv16            00D91C RLA    
+ptr1                      00000F RLZ    ptr2                      000011 RLZ    
+ptr3                      000013 RLZ    ptr4                      000015 RLZ    
+push0ax                   00D6F5 RLA    pusha                     00D8D4 RLA    
+pusha0                    00D8E8 RLA    pushax                    00D8EA RLA    
+pusheax                   00D6FB RLA    pushw0sp                  00D900 RLA    
+pushwysp                  00D902 RLA    regsave                   00000B RLZ    
+shlax2                    00D42D RLA    shlax3                    00D438 RLA    
+shlax4                    00D446 RLA    shrax1                    00D93C RLA    
+shrax3                    00D944 RLA    shrax4                    00D952 RLA    
+sp                        000007 RLZ    sreg                      000009 RLZ    
+staspidx                  00D963 RLA    stax0sp                   00D979 RLA    
+staxspidx                 00D984 RLA    staxysp                   00D97B RLA    
+steax0sp                  00D99F RLA    steaxysp                  00D9A1 RLA    
+subysp                    00D9DF RLA    tmp1                      000017 RLZ    
+tmp2                      000018 RLZ    tmp3                      000019 RLZ    
+tmp4                      00001A RLZ    tosaddax                  00D405 RLA    
+tosaddeax                 00D5C4 RLA    tosdiva0                  00D540 RLA    
+tosicmp                   00D557 RLA    tosicmp0                  00D555 RLA    
+toslcmp                   00D610 RLA    tosmula0                  00D826 RLA    
+tosmulax                  00D7E1 RLA    tosneeax                  00D6EC RLA    
+tosora0                   00D8B0 RLA    tossuba0                  00D9CA RLA    
+tossubax                  00D9CC RLA    tosudiv0ax                00D722 RLA    
+tosudiva0                 00D9EC RLA    tosudivax                 00D9EE RLA    
+tosumod0ax                00D79C RLA    tosumoda0                 00DA3B RLA    
+tosumul0ax                00D690 RLA    tosumula0                 00D826 RLA    
+udiv16                    00D9FD RLA    udiv32                    00D757 RLA    
+utsteax                   00D713 RLA    
+
+
+Exports list by value:
+----------------------
+__STARTUP__               000001 REA    _nmi_ready                000002 RLZ    
+_nmi_count                000003 RLZ    _ppumask                  000004 RLZ    
+_ppuctrl                  000005 RLZ    _vlen                     000006 RLZ    
+__DATA_SIZE__             000007 REA    sp                        000007 RLZ    
+sreg                      000009 RLZ    regsave                   00000B RLZ    
+ptr1                      00000F RLZ    ptr2                      000011 RLZ    
+ptr3                      000013 RLZ    ptr4                      000015 RLZ    
+tmp1                      000017 RLZ    tmp2                      000018 RLZ    
+tmp3                      000019 RLZ    tmp4                      00001A RLZ    
+__STACKSIZE__             000100 REA    _oam                      000200 RLA    
+_vbuf                     000300 RLA    _G                        000454 RLA    
+_doorx                    0004FC RLA    _doory                    000508 RLA    
+__DATA_RUN__              0005B6 RLA    __STACKSTART__            000700 REA    
+_snd_sfx                  0080AC RLA    _snd_clank                0080F9 RLA    
+_snd_jingle               008121 RLA    _snd_new_game             0081B8 RLA    
+_main                     0099C3 RLA    _game_init                00A19A RLA    
+_game_tick                00A222 RLA    tosaddax                  00D405 RLA    
+addysp1                   00D41F RLA    addysp                    00D420 RLA    
+aslax2                    00D42D RLA    shlax2                    00D42D RLA    
+aslax3                    00D438 RLA    shlax3                    00D438 RLA    
+aslax4                    00D446 RLA    shlax4                    00D446 RLA    
+asrax1                    00D457 RLA    asrax2                    00D461 RLA    
+asrax3                    00D470 RLA    asrax4                    00D484 RLA    
+axlong                    00D49D RLA    bnegax                    00D4AA RLA    
+bnega                     00D4AE RLA    copydata                  00D4B8 RLA    
+decsp2                    00D4E5 RLA    decsp3                    00D4F2 RLA    
+decsp4                    00D4FF RLA    decsp5                    00D50C RLA    
+decsp6                    00D519 RLA    decsp7                    00D526 RLA    
+decsp8                    00D533 RLA    tosdiva0                  00D540 RLA    
+tosicmp0                  00D555 RLA    tosicmp                   00D557 RLA    
+incsp1                    00D583 RLA    popax                     00D58A RLA    
+incsp2                    00D592 RLA    incsp3                    00D5A0 RLA    
+incsp4                    00D5A5 RLA    incsp5                    00D5AA RLA    
+incsp6                    00D5AF RLA    incsp7                    00D5B4 RLA    
+incsp8                    00D5B9 RLA    tosaddeax                 00D5C4 RLA    
+laddeqa                   00D5E5 RLA    laddeq                    00D5EB RLA    
+toslcmp                   00D610 RLA    ldaidx                    00D64B RLA    
+ldeaxysp                  00D659 RLA    deceaxy                   00D66A RLA    
+inceaxy                   00D67F RLA    tosumul0ax                00D690 RLA    
+tosneeax                  00D6EC RLA    push0ax                   00D6F5 RLA    
+pusheax                   00D6FB RLA    utsteax                   00D713 RLA    
+tosudiv0ax                00D722 RLA    getlop                    00D733 RLA    
+udiv32                    00D757 RLA    tosumod0ax                00D79C RLA    
+boolne                    00D7B5 RLA    booleq                    00D7BB RLA    
+boolult                   00D7D4 RLA    tosmulax                  00D7E1 RLA    
+tosmula0                  00D826 RLA    tosumula0                 00D826 RLA    
+mul8x16                   00D828 RLA    mul8x16a                  00D832 RLA    
+mulax3                    00D860 RLA    mulax6                    00D871 RLA    
+mulax9                    00D887 RLA    negax                     00D8A2 RLA    
+tosora0                   00D8B0 RLA    popptr1                   00D8C2 RLA    
+pusha                     00D8D4 RLA    pusha0                    00D8E8 RLA    
+pushax                    00D8EA RLA    pushw0sp                  00D900 RLA    
+pushwysp                  00D902 RLA    popsargsudiv16            00D91C RLA    
+shrax1                    00D93C RLA    shrax3                    00D944 RLA    
+shrax4                    00D952 RLA    staspidx                  00D963 RLA    
+stax0sp                   00D979 RLA    staxysp                   00D97B RLA    
+staxspidx                 00D984 RLA    steax0sp                  00D99F RLA    
+steaxysp                  00D9A1 RLA    _strlen                   00D9B4 RLA    
+tossuba0                  00D9CA RLA    tossubax                  00D9CC RLA    
+subysp                    00D9DF RLA    tosudiva0                 00D9EC RLA    
+tosudivax                 00D9EE RLA    udiv16                    00D9FD RLA    
+tosumoda0                 00DA3B RLA    _nt_rom                   00DA4C RLA    
+_attr_rom                 00DD6C RLA    _shop_kind                00EF03 RLA    
+__DATA_LOAD__             00EF62 RLA    
+
+
+Imports list:
+-------------
+_G (core.o):
+    plat_nes.o                build/plat_nes.s(17)
+__DATA_LOAD__ ([linker generated]):
+    copydata.o                common/copydata.s(8)
+__DATA_RUN__ ([linker generated]):
+    copydata.o                common/copydata.s(8)
+__DATA_SIZE__ ([linker generated]):
+    copydata.o                common/copydata.s(8)
+__STACKSIZE__ ([linker generated]):
+    crt0.o                    src/crt0.s(6)
+__STACKSTART__ ([linker generated]):
+    crt0.o                    src/crt0.s(6)
+__STARTUP__ (crt0.o):
+    plat_nes.o                build/plat_nes.s(13)
+_attr_rom (crt0.o):
+    plat_nes.o                build/plat_nes.s(35)
+_doorx (core.o):
+    plat_nes.o                build/plat_nes.s(18)
+_doory (core.o):
+    plat_nes.o                build/plat_nes.s(19)
+_game_init (core.o):
+    plat_nes.o                build/plat_nes.s(21)
+_game_tick (core.o):
+    plat_nes.o                build/plat_nes.s(22)
+_main (plat_nes.o):
+    crt0.o                    src/crt0.s(5)
+_nmi_count (crt0.o):
+    plat_nes.o                build/plat_nes.s(28)
+_nmi_ready (crt0.o):
+    plat_nes.o                build/plat_nes.s(27)
+_nt_rom (crt0.o):
+    plat_nes.o                build/plat_nes.s(34)
+_oam (crt0.o):
+    plat_nes.o                build/plat_nes.s(33)
+_ppuctrl (crt0.o):
+    plat_nes.o                build/plat_nes.s(30)
+_ppumask (crt0.o):
+    plat_nes.o                build/plat_nes.s(29)
+_shop_kind (core.o):
+    plat_nes.o                build/plat_nes.s(20)
+_snd_clank (plat_nes.o):
+    core.o                    build/core.s(29)
+_snd_jingle (plat_nes.o):
+    core.o                    build/core.s(30)
+_snd_new_game (plat_nes.o):
+    core.o                    build/core.s(31)
+_snd_sfx (plat_nes.o):
+    core.o                    build/core.s(28)
+_strlen (strlen.o):
+    plat_nes.o                build/plat_nes.s(14)
+_vbuf (crt0.o):
+    plat_nes.o                build/plat_nes.s(32)
+_vlen (crt0.o):
+    plat_nes.o                build/plat_nes.s(31)
+addysp (addysp.o):
+    incsp8.o                  runtime/incsp8.s(8)
+    incsp7.o                  runtime/incsp7.s(8)
+    incsp6.o                  runtime/incsp6.s(8)
+    incsp5.o                  runtime/incsp5.s(8)
+    incsp4.o                  runtime/incsp4.s(8)
+    incsp3.o                  runtime/incsp3.s(8)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+addysp1 (addysp.o):
+    sub.o                     runtime/sub.s(8)
+    or.o                      runtime/or.s(9)
+    ludiv.o                   runtime/ludiv.s(9)
+    lmul.o                    runtime/lmul.s(9)
+    ladd.o                    runtime/ladd.s(8)
+aslax2 (aslax2.o):
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+aslax3 (aslax3.o):
+    plat_nes.o                build/plat_nes.s(6091)
+aslax4 (aslax4.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+asrax1 (asrax1.o):
+    core.o                    build/core.s(9025)
+asrax2 (asrax2.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+asrax3 (asrax3.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+asrax4 (asrax4.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+axlong (axlong.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+bnega (bneg.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+bnegax (bneg.o):
+    core.o                    build/core.s(9025)
+booleq (makebool.o):
+    plat_nes.o                build/plat_nes.s(6091)
+boolne (makebool.o):
+    lne.o                     runtime/lne.s(8)
+    core.o                    build/core.s(9025)
+boolult (makebool.o):
+    plat_nes.o                build/plat_nes.s(6091)
+copydata (copydata.o):
+    crt0.o                    src/crt0.s(5)
+deceaxy (ldec.o):
+    plat_nes.o                build/plat_nes.s(6091)
+decsp2 (decsp2.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+decsp3 (decsp3.o):
+    plat_nes.o                build/plat_nes.s(6091)
+decsp4 (decsp4.o):
+    lpush.o                   runtime/lpush.s(12)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+decsp5 (decsp5.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+decsp6 (decsp6.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+decsp7 (decsp7.o):
+    plat_nes.o                build/plat_nes.s(6091)
+decsp8 (decsp8.o):
+    core.o                    build/core.s(9025)
+getlop (ludiv.o):
+    lumod.o                   runtime/lumod.s(9)
+inceaxy (linc.o):
+    plat_nes.o                build/plat_nes.s(6091)
+incsp1 (incsp1.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+incsp2 (incsp2.o):
+    staxspi.o                 runtime/staxspi.s(9)
+    staspidx.o                runtime/staspidx.s(8)
+    popptr1.o                 runtime/popptr1.s(8)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+incsp3 (incsp3.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+incsp4 (incsp4.o):
+    lcmp.o                    runtime/lcmp.s(9)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+incsp5 (incsp5.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+incsp6 (incsp6.o):
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+incsp7 (incsp7.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+incsp8 (incsp8.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+laddeq (laddeq.o):
+    core.o                    build/core.s(9025)
+laddeqa (laddeq.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+ldaidx (ldai.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+ldeaxysp (ldeaxysp.o):
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+mul8x16 (mul8.o):
+    mul.o                     runtime/mul.s(8)
+mul8x16a (mul8.o):
+    mul.o                     runtime/mul.s(8)
+mulax3 (mulax3.o):
+    core.o                    build/core.s(9025)
+mulax6 (mulax6.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+mulax9 (mulax9.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+negax (negabs.o):
+    shelp.o                   runtime/shelp.s(11)
+    div.o                     runtime/div.s(11)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+popax (incsp2.o):
+    shelp.o                   runtime/shelp.s(11)
+popptr1 (popptr1.o):
+    umod.o                    runtime/umod.s(8)
+    udiv.o                    runtime/udiv.s(9)
+    mul8.o                    runtime/mul8.s(9)
+    mul.o                     runtime/mul.s(9)
+popsargsudiv16 (shelp.o):
+    div.o                     runtime/div.s(11)
+ptr1 (zeropage.o):
+    lcmp.o                    runtime/lcmp.s(10)
+    udiv.o                    runtime/udiv.s(10)
+    staxspi.o                 runtime/staxspi.s(10)
+    staspidx.o                runtime/staspidx.s(9)
+    shelp.o                   runtime/shelp.s(12)
+    popptr1.o                 runtime/popptr1.s(9)
+    mulax9.o                  runtime/mulax9.s(10)
+    mulax6.o                  runtime/mulax6.s(9)
+    mulax3.o                  runtime/mulax3.s(9)
+    mul8.o                    runtime/mul8.s(10)
+    mul.o                     runtime/mul.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmul.o                    runtime/lmul.s(10)
+    ldai.o                    runtime/ldai.s(8)
+    laddeq.o                  runtime/laddeq.s(12)
+    div.o                     runtime/div.s(12)
+    copydata.o                common/copydata.s(9)
+    core.o                    build/core.s(11)
+    plat_nes.o                build/plat_nes.s(11)
+ptr2 (zeropage.o):
+    strlen.o                  common/strlen.s(12)
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    copydata.o                common/copydata.s(9)
+    plat_nes.o                build/plat_nes.s(11)
+ptr3 (zeropage.o):
+    ludiv.o                   runtime/ludiv.s(10)
+    lmul.o                    runtime/lmul.s(10)
+ptr4 (zeropage.o):
+    umod.o                    runtime/umod.s(9)
+    udiv.o                    runtime/udiv.s(10)
+    shelp.o                   runtime/shelp.s(12)
+    mul8.o                    runtime/mul8.s(10)
+    mul.o                     runtime/mul.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmul.o                    runtime/lmul.s(10)
+    linc.o                    runtime/linc.s(8)
+push0ax (lpush.o):
+    core.o                    build/core.s(9025)
+pusha (pusha.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+pusha0 (pushax.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+pushax (pushax.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+pusheax (lpush.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+pushw0sp (pushwsp.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+pushwysp (pushwsp.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+regsave (zeropage.o):
+    plat_nes.o                build/plat_nes.s(10)
+shlax2 (aslax2.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+shlax3 (aslax3.o):
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+shlax4 (aslax4.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+shrax1 (shrax1.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+shrax3 (shrax3.o):
+    core.o                    build/core.s(9025)
+shrax4 (shrax4.o):
+    core.o                    build/core.s(9025)
+sp (zeropage.o):
+    lcmp.o                    runtime/lcmp.s(10)
+    subysp.o                  runtime/subysp.s(9)
+    sub.o                     runtime/sub.s(9)
+    steaxsp.o                 runtime/steaxsp.s(8)
+    staxspi.o                 runtime/staxspi.s(10)
+    staxsp.o                  runtime/staxsp.s(8)
+    staspidx.o                runtime/staspidx.s(9)
+    pushwsp.o                 runtime/pushwsp.s(8)
+    pushax.o                  runtime/pushax.s(8)
+    pusha.o                   runtime/pusha.s(8)
+    popptr1.o                 runtime/popptr1.s(9)
+    or.o                      runtime/or.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lpush.o                   runtime/lpush.s(13)
+    lmul.o                    runtime/lmul.s(10)
+    ldeaxysp.o                runtime/ldeaxysp.s(12)
+    ladd.o                    runtime/ladd.s(9)
+    incsp2.o                  runtime/incsp2.s(8)
+    incsp1.o                  runtime/incsp1.s(8)
+    icmp.o                    runtime/icmp.s(9)
+    decsp8.o                  runtime/decsp8.s(8)
+    decsp7.o                  runtime/decsp7.s(8)
+    decsp6.o                  runtime/decsp6.s(8)
+    decsp5.o                  runtime/decsp5.s(8)
+    decsp4.o                  runtime/decsp4.s(8)
+    decsp3.o                  runtime/decsp3.s(8)
+    decsp2.o                  runtime/decsp2.s(8)
+    addysp.o                  runtime/addysp.s(8)
+    add.o                     runtime/add.s(12)
+    core.o                    build/core.s(10)
+    plat_nes.o                build/plat_nes.s(10)
+    crt0.o                    src/crt0.s(7)
+sreg (zeropage.o):
+    lcmp.o                    runtime/lcmp.s(10)
+    umod.o                    runtime/umod.s(9)
+    udiv.o                    runtime/udiv.s(10)
+    steaxsp.o                 runtime/steaxsp.s(8)
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    ltest.o                   runtime/ltest.s(8)
+    lpush.o                   runtime/lpush.s(13)
+    lmul.o                    runtime/lmul.s(10)
+    linc.o                    runtime/linc.s(8)
+    ldec.o                    runtime/ldec.s(9)
+    ldeaxysp.o                runtime/ldeaxysp.s(12)
+    laddeq.o                  runtime/laddeq.s(12)
+    ladd.o                    runtime/ladd.s(9)
+    icmp.o                    runtime/icmp.s(9)
+    axlong.o                  runtime/axlong.s(9)
+    core.o                    build/core.s(10)
+    plat_nes.o                build/plat_nes.s(10)
+staspidx (staspidx.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+stax0sp (staxsp.o):
+    core.o                    build/core.s(9025)
+staxspidx (staxspi.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+staxysp (staxsp.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+steax0sp (steaxsp.o):
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+steaxysp (steaxsp.o):
+    plat_nes.o                build/plat_nes.s(6091)
+subysp (subysp.o):
+    core.o                    build/core.s(9025)
+tmp1 (zeropage.o):
+    staxspi.o                 runtime/staxspi.s(10)
+    staspidx.o                runtime/staspidx.s(9)
+    shrax4.o                  runtime/shrax4.s(8)
+    shrax3.o                  runtime/shrax3.s(8)
+    shrax1.o                  runtime/shrax1.s(8)
+    shelp.o                   runtime/shelp.s(12)
+    or.o                      runtime/or.s(10)
+    mul.o                     runtime/mul.s(10)
+    ltest.o                   runtime/ltest.s(8)
+    ldec.o                    runtime/ldec.s(9)
+    ladd.o                    runtime/ladd.s(9)
+    div.o                     runtime/div.s(12)
+    copydata.o                common/copydata.s(9)
+    asrax4.o                  runtime/asrax4.s(9)
+    asrax3.o                  runtime/asrax3.s(9)
+    asrax2.o                  runtime/asrax2.s(8)
+    asrax1.o                  runtime/asrax1.s(8)
+    aslax4.o                  runtime/aslax4.s(8)
+    aslax3.o                  runtime/aslax3.s(8)
+    aslax2.o                  runtime/aslax2.s(8)
+    add.o                     runtime/add.s(12)
+    core.o                    build/core.s(11)
+    plat_nes.o                build/plat_nes.s(11)
+tmp2 (zeropage.o):
+    shelp.o                   runtime/shelp.s(12)
+    lmul.o                    runtime/lmul.s(10)
+    div.o                     runtime/div.s(12)
+tmp3 (zeropage.o):
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmul.o                    runtime/lmul.s(10)
+tmp4 (zeropage.o):
+    lumod.o                   runtime/lumod.s(10)
+    ludiv.o                   runtime/ludiv.s(10)
+    lmul.o                    runtime/lmul.s(10)
+tosaddax (add.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+tosaddeax (ladd.o):
+    core.o                    build/core.s(9025)
+tosdiva0 (div.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+tosicmp (icmp.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+tosicmp0 (icmp.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+toslcmp (lcmp.o):
+    lne.o                     runtime/lne.s(8)
+tosmula0 (mul8.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+tosmulax (mul.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+tosneeax (lne.o):
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+tosora0 (or.o):
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+tossuba0 (sub.o):
+    plat_nes.o                build/plat_nes.s(6091)
+tossubax (sub.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+tosudiv0ax (ludiv.o):
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+tosudiva0 (udiv.o):
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+tosudivax (udiv.o):
+    plat_nes.o                build/plat_nes.s(6091)
+tosumod0ax (lumod.o):
+    plat_nes.o                build/plat_nes.s(6091)
+tosumoda0 (umod.o):
+    plat_nes.o                build/plat_nes.s(6091)
+    plat_nes.o                build/plat_nes.s(6091)
+tosumul0ax (lmul.o):
+    core.o                    build/core.s(9025)
+tosumula0 (mul8.o):
+    core.o                    build/core.s(9025)
+    core.o                    build/core.s(9025)
+    plat_nes.o                build/plat_nes.s(6091)
+udiv16 (udiv.o):
+    umod.o                    runtime/umod.s(8)
+    shelp.o                   runtime/shelp.s(11)
+udiv32 (ludiv.o):
+    lumod.o                   runtime/lumod.s(9)
+utsteax (ltest.o):
+    plat_nes.o                build/plat_nes.s(6091)
+
