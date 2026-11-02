@@ -1,6 +1,7 @@
 # CHOPPING MALL — NES version
 
-![cover](docs/cover.png)
+[![chopping mall on NES](docs/cover.png)](https://www.youtube.com/watch?v=4cjTHjFHEyg "gameplay")
+
 
 The same game core as the C64 version (`../chop64/src/core.c`, integer physics, 32 directions, one tick = 1/50 s), with an NES platform
 layer. **NROM-256 (mapper 0): 32 KB PRG + 8 KB CHR-ROM, 2 KB RAM, no mapper tricks.** First version as agreed: **no loading screen and no

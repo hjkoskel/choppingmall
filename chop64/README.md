@@ -1,5 +1,7 @@
 # CHOPPING MALL – Commodore 64 edition
 
+[![chopping mall on C64](c64gameplay.png)](https://www.youtube.com/watch?v=eLL3L_sx1Ug "gameplay")
+
 A "tuned down" version of the game in C that compiles to a real C64 program with [cc65](https://cc65.github.io)
 (tested with cc65 2.19 and the VICE emulator). It is **not** a recompile of the desktop port: that one uses
 `double` maths, a 960×760 vector renderer and a Web-Audio-style synth, none of which exist on a 1 MHz 6502
